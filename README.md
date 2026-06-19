@@ -7,7 +7,6 @@ A visual tool for creating and exporting design system documentation in Markdown
 ![Preview](public/screenshot.png)
 
 ---
-description as (Pre)
 ## Features
 
 - **Markdown Documentation** — Generate comprehensive `design.md` docs with color tables, type scales, component specs, and more
