@@ -1,0 +1,2840 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DesignMD</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&family=Roboto:wght@400;500;700&family=Open+Sans:wght@400;500;600;700&family=Lato:wght@400;700&family=Montserrat:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&family=Source+Sans+Pro:wght@400;600;700&family=Merriweather:wght@400;700&family=Nunito:wght@400;600;700;800&family=Work+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700&family=Sora:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fraunces:wght@400;500;600;700&family=Bricolage+Grotesque:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; overflow: hidden; }
+  body {
+    font-family: 'Space Grotesk', system-ui, sans-serif;
+    background: #0a0a0c;
+    color: #e8e8ec;
+    font-size: 13px;
+    -webkit-font-smoothing: antialiased;
+  }
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: #2a2a32; border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: #3a3a45; }
+
+  /* ========== TOPBAR ========== */
+  .topbar {
+    height: 56px;
+    background: rgba(14, 14, 18, 0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid #1f1f26;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 18px;
+    position: relative;
+    z-index: 50;
+  }
+  .brand { display: flex; align-items: center; gap: 12px; }
+  .logo {
+    width: 34px; height: 34px;
+    background: linear-gradient(135deg, #d4ff3d 0%, #84cc16 100%);
+    color: #0a0a0c;
+    border-radius: 8px;
+    display: grid; place-items: center;
+    font-weight: 700;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    box-shadow: 0 4px 12px rgba(212, 255, 61, 0.25);
+  }
+  .brand-text { display: flex; flex-direction: column; line-height: 1.1; }
+  .brand-name { font-weight: 600; font-size: 13px; letter-spacing: -0.01em; }
+  .brand-sub { font-size: 10px; color: #6a6a78; font-family: 'JetBrains Mono', monospace; text-transform: uppercase; letter-spacing: 0.08em; }
+  .project-input {
+    background: transparent;
+    border: 1px solid transparent;
+    color: #e8e8ec;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 5px 10px;
+    border-radius: 6px;
+    width: 220px;
+    transition: all 0.15s;
+  }
+  .project-input:hover { background: #1a1a20; }
+  .project-input:focus { outline: none; background: #1a1a20; border-color: #d4ff3d; }
+  .topbar-actions { display: flex; align-items: center; gap: 6px; }
+  .btn {
+    padding: 7px 13px;
+    background: #1a1a20;
+    border: 1px solid #2a2a32;
+    color: #e8e8ec;
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.15s;
+  }
+  .btn:hover { background: #22222a; border-color: #3a3a45; }
+  .btn-primary {
+    background: #d4ff3d;
+    color: #0a0a0c;
+    border-color: #d4ff3d;
+    font-weight: 600;
+  }
+  .btn-primary:hover { background: #c0eb2c; border-color: #c0eb2c; }
+  .btn svg { width: 13px; height: 13px; }
+  .export-wrap { position: relative; }
+  .export-dropdown {
+    position: absolute;
+    top: calc(100% + 6px);
+    right: 0;
+    min-width: 220px;
+    background: #141418;
+    border: 1px solid #2a2a32;
+    border-radius: 8px;
+    padding: 5px;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-4px);
+    transition: all 0.15s;
+    z-index: 100;
+  }
+  .export-dropdown.open { opacity: 1; visibility: visible; transform: translateY(0); }
+  .export-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 8px 10px;
+    background: transparent;
+    border: none;
+    color: #e8e8ec;
+    text-align: left;
+    cursor: pointer;
+    border-radius: 5px;
+    font-family: inherit;
+    font-size: 12px;
+  }
+  .export-item:hover { background: #1f1f26; }
+  .export-item .ext { color: #6a6a78; font-family: 'JetBrains Mono', monospace; font-size: 10px; }
+
+  /* ========== MAIN LAYOUT ========== */
+  .main {
+    display: grid;
+    grid-template-columns: 200px 380px 1fr;
+    height: calc(100vh - 56px);
+  }
+
+  /* ========== SIDEBAR ========== */
+  .sidebar {
+    background: #0c0c10;
+    border-right: 1px solid #1f1f26;
+    padding: 14px 10px;
+    overflow-y: auto;
+  }
+  .nav-section-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #4a4a55;
+    font-weight: 600;
+    padding: 12px 10px 6px;
+  }
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 8px 10px;
+    background: transparent;
+    border: none;
+    color: #8888a0;
+    text-align: left;
+    cursor: pointer;
+    border-radius: 6px;
+    font-size: 12.5px;
+    font-weight: 500;
+    font-family: inherit;
+    transition: all 0.12s;
+    margin-bottom: 1px;
+  }
+  .nav-item:hover { background: #16161c; color: #d8d8e0; }
+  .nav-item.active { background: #d4ff3d; color: #0a0a0c; font-weight: 600; }
+  .nav-item svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+  /* ========== CONFIG PANEL ========== */
+  .config-panel {
+    background: #101015;
+    border-right: 1px solid #1f1f26;
+    overflow-y: auto;
+    padding: 22px 22px 60px;
+  }
+  .panel-header { margin-bottom: 22px; }
+  .panel-title {
+    font-size: 19px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    margin-bottom: 3px;
+  }
+  .panel-desc {
+    color: #6a6a78;
+    font-size: 12px;
+    line-height: 1.5;
+  }
+
+  /* ========== FORM CONTROLS ========== */
+  .form-group { margin-bottom: 16px; }
+  .form-label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #8888a0;
+    margin-bottom: 6px;
+    font-weight: 600;
+  }
+  .form-label .hint { color: #4a4a55; text-transform: none; letter-spacing: 0; font-weight: 400; font-size: 10px; }
+  .form-input, .form-select, .form-textarea {
+    width: 100%;
+    padding: 8px 11px;
+    background: #181820;
+    border: 1px solid #26262e;
+    color: #e8e8ec;
+    border-radius: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    transition: all 0.15s;
+  }
+  .form-input:focus, .form-select:focus, .form-textarea:focus {
+    outline: none;
+    border-color: #d4ff3d;
+    background: #1c1c24;
+  }
+  .form-select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238888a0' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    padding-right: 30px;
+    cursor: pointer;
+  }
+  .form-textarea { resize: vertical; min-height: 70px; font-family: 'Space Grotesk', sans-serif; }
+
+  /* Slider */
+  .slider-row { display: flex; align-items: center; gap: 10px; }
+  .slider {
+    flex: 1;
+    -webkit-appearance: none;
+    appearance: none;
+    height: 4px;
+    background: #26262e;
+    border-radius: 2px;
+    cursor: pointer;
+  }
+  .slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 14px; height: 14px;
+    background: #d4ff3d;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 0 0 3px rgba(212, 255, 61, 0.2);
+    transition: all 0.15s;
+  }
+  .slider::-webkit-slider-thumb:hover { transform: scale(1.15); }
+  .slider::-moz-range-thumb {
+    width: 14px; height: 14px;
+    background: #d4ff3d;
+    border-radius: 50%;
+    cursor: pointer;
+    border: none;
+  }
+  .slider-val {
+    min-width: 56px;
+    text-align: right;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: #d8d8e0;
+    background: #181820;
+    border: 1px solid #26262e;
+    padding: 4px 8px;
+    border-radius: 4px;
+  }
+
+  /* Color Control */
+  .color-control {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 10px;
+    background: #181820;
+    border: 1px solid #26262e;
+    border-radius: 8px;
+    margin-bottom: 6px;
+    transition: all 0.15s;
+  }
+  .color-control:hover { border-color: #353540; }
+  .color-swatch {
+    width: 36px; height: 36px;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.1);
+    flex-shrink: 0;
+  }
+  .color-swatch input[type="color"] {
+    position: absolute;
+    inset: -4px;
+    border: none;
+    cursor: pointer;
+    opacity: 0;
+    width: calc(100% + 8px);
+    height: calc(100% + 8px);
+  }
+  .color-meta { flex: 1; min-width: 0; }
+  .color-name { font-size: 12px; font-weight: 600; color: #e8e8ec; margin-bottom: 2px; }
+  .color-values {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9.5px;
+    color: #6a6a78;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .color-hex {
+    width: 84px;
+    padding: 6px 8px;
+    background: #0a0a0c;
+    border: 1px solid #26262e;
+    color: #e8e8ec;
+    border-radius: 4px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+  }
+  .color-hex:focus { outline: none; border-color: #d4ff3d; }
+  .icon-btn {
+    width: 30px; height: 30px;
+    background: #0a0a0c;
+    border: 1px solid #26262e;
+    border-radius: 5px;
+    color: #8888a0;
+    cursor: pointer;
+    display: grid; place-items: center;
+    flex-shrink: 0;
+    transition: all 0.15s;
+  }
+  .icon-btn:hover { color: #d4ff3d; border-color: #d4ff3d; background: rgba(212, 255, 61, 0.05); }
+  .icon-btn svg { width: 12px; height: 12px; }
+
+  /* Theme Tabs */
+  .theme-tabs {
+    display: flex;
+    background: #181820;
+    border: 1px solid #26262e;
+    border-radius: 7px;
+    padding: 3px;
+    margin-bottom: 16px;
+  }
+  .theme-tab {
+    flex: 1;
+    padding: 7px 12px;
+    background: transparent;
+    border: none;
+    color: #8888a0;
+    border-radius: 5px;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+  .theme-tab.active { background: #26262e; color: #e8e8ec; }
+  .theme-tab svg { width: 12px; height: 12px; }
+
+  /* Component Sub-tabs */
+  .comp-tabs {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 4px;
+    margin-bottom: 16px;
+  }
+  .comp-tab {
+    padding: 8px 6px;
+    background: #181820;
+    border: 1px solid #26262e;
+    color: #8888a0;
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 11px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .comp-tab:hover { color: #d8d8e0; border-color: #353540; }
+  .comp-tab.active { background: #d4ff3d; color: #0a0a0c; border-color: #d4ff3d; font-weight: 600; }
+
+  /* Card sections */
+  .card-section {
+    background: #0c0c10;
+    border: 1px solid #1f1f26;
+    border-radius: 10px;
+    padding: 14px;
+    margin-bottom: 12px;
+  }
+  .card-section-title {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #8888a0;
+    font-weight: 600;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .card-section-title::before {
+    content: '';
+    width: 3px; height: 12px;
+    background: #d4ff3d;
+    border-radius: 2px;
+  }
+
+  /* Two column */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+
+  /* Typography preview */
+  .type-preview {
+    background: #0c0c10;
+    border: 1px solid #1f1f26;
+    border-radius: 10px;
+    padding: 18px;
+    margin-top: 10px;
+  }
+  .type-row {
+    padding: 8px 0;
+    border-bottom: 1px solid #1f1f26;
+  }
+  .type-row:last-child { border-bottom: none; }
+  .type-meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: #6a6a78;
+    margin-bottom: 2px;
+  }
+
+  /* Radius preview */
+  .radius-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-top: 10px;
+  }
+  .radius-card {
+    background: #181820;
+    border: 1px solid #26262e;
+    padding: 10px;
+    text-align: center;
+  }
+  .radius-box {
+    width: 100%;
+    height: 50px;
+    background: linear-gradient(135deg, #d4ff3d, #84cc16);
+    margin-bottom: 8px;
+  }
+  .radius-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: #8888a0;
+  }
+
+  /* Shadow preview */
+  .shadow-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-top: 10px;
+  }
+  .shadow-card {
+    background: #181820;
+    border: 1px solid #26262e;
+    padding: 14px;
+    border-radius: 8px;
+  }
+  .shadow-preview {
+    width: 100%;
+    height: 60px;
+    background: #fff;
+    border-radius: 6px;
+    margin-bottom: 8px;
+  }
+  .shadow-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: #8888a0;
+    text-align: center;
+  }
+
+  /* Spacing preview */
+  .spacing-list { margin-top: 8px; }
+  .spacing-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 6px 0;
+    border-bottom: 1px solid #1f1f26;
+  }
+  .spacing-row:last-child { border-bottom: none; }
+  .spacing-bar {
+    height: 16px;
+    background: linear-gradient(90deg, #d4ff3d, #84cc16);
+    border-radius: 3px;
+  }
+  .spacing-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: #d8d8e0;
+    min-width: 36px;
+  }
+  .spacing-val {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: #6a6a78;
+    margin-left: auto;
+  }
+
+  /* ========== PREVIEW PANEL ========== */
+  .preview-panel {
+    background: #0a0a0c;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .preview-header {
+    height: 42px;
+    border-bottom: 1px solid #1f1f26;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+    background: rgba(14, 14, 18, 0.5);
+  }
+  .preview-tabs { display: flex; gap: 4px; background: #181820; padding: 3px; border-radius: 6px; }
+  .preview-tab {
+    padding: 5px 14px;
+    background: transparent;
+    border: none;
+    color: #8888a0;
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: 11px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: all 0.15s;
+  }
+  .preview-tab.active { background: #26262e; color: #e8e8ec; }
+  .preview-tab svg { width: 11px; height: 11px; }
+  .preview-info {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: #4a4a55;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .preview-frame {
+    flex: 1;
+    overflow-y: auto;
+    background: #fff;
+    transition: background 0.3s;
+  }
+  .preview-frame.dark { background: #0f172a; }
+
+  /* Preview content styles */
+  .pv-page { min-height: 100%; }
+  .pv-container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+  
+  /* ========== TOAST ========== */
+  .toast-container {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .toast {
+    background: #181820;
+    border: 1px solid #2a2a32;
+    color: #e8e8ec;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-size: 12px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    opacity: 0;
+    transform: translateX(20px);
+    transition: all 0.25s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 200px;
+  }
+  .toast.show { opacity: 1; transform: translateX(0); }
+  .toast.success { border-color: #d4ff3d; }
+  .toast.success .toast-dot { background: #d4ff3d; }
+  .toast.error { border-color: #f87171; }
+  .toast.error .toast-dot { background: #f87171; }
+  .toast-dot { width: 8px; height: 8px; border-radius: 50%; background: #d4ff3d; }
+
+  /* Modal */
+  .modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(4px);
+    z-index: 200;
+    display: none;
+    align-items: center;
+    justify-content: center;
+  }
+  .modal-backdrop.open { display: flex; }
+  .modal {
+    background: #141418;
+    border: 1px solid #2a2a32;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 540px;
+    max-height: 80vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  .modal-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid #1f1f26;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .modal-title { font-size: 15px; font-weight: 600; }
+  .modal-body { padding: 20px; overflow-y: auto; }
+  .modal-footer {
+    padding: 12px 20px;
+    border-top: 1px solid #1f1f26;
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+  }
+  .code-output {
+    background: #0a0a0c;
+    border: 1px solid #26262e;
+    border-radius: 6px;
+    padding: 14px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: #d8d8e0;
+    white-space: pre;
+    overflow: auto;
+    max-height: 50vh;
+    line-height: 1.6;
+  }
+
+  /* Hover row for list items */
+  .list-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    background: #181820;
+    border: 1px solid #26262e;
+    border-radius: 6px;
+    margin-bottom: 4px;
+  }
+  .list-row input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: #e8e8ec;
+    font-family: inherit;
+    font-size: 12px;
+    outline: none;
+  }
+  .list-row .drag-handle { color: #4a4a55; cursor: grab; }
+
+  /* Background pattern */
+  .topbar::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 50%;
+    width: 200px; height: 1px;
+    background: linear-gradient(90deg, transparent, #d4ff3d, transparent);
+    transform: translateX(-50%);
+    opacity: 0.4;
+  }
+
+  /* Breakpoint row */
+  .bp-row {
+    display: grid;
+    grid-template-columns: 100px 1fr 60px;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 6px;
+  }
+
+  @media (max-width: 1100px) {
+    .main { grid-template-columns: 180px 340px 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <div class="logo">DT</div>
+    <div class="brand-text">
+      <span class="brand-name">DesignMD</span>
+      <span class="brand-sub">v1.0 · Design Doc Generator</span>
+    </div>
+    <input type="text" class="project-input" id="projectName" value="Aurora Design System">
+  </div>
+  <div class="topbar-actions">
+    <button class="btn" id="importBtn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+      Import
+    </button>
+    <button class="btn" id="resetBtn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+      Reset
+    </button>
+    <button class="btn" id="copyMdBtn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+      Copy MD
+    </button>
+    <div class="export-wrap">
+      <button class="btn btn-primary" id="exportBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Export
+      </button>
+      <div class="export-dropdown" id="exportDropdown">
+        <button class="export-item" data-export="md">design.md <span class="ext">.md</span></button>
+        <button class="export-item" data-export="json">Configuration <span class="ext">.json</span></button>
+        <button class="export-item" data-export="css">CSS Variables <span class="ext">.css</span></button>
+        <button class="export-item" data-export="tailwind">Tailwind Config <span class="ext">.js</span></button>
+        <button class="export-item" data-export="tokens">Design Tokens <span class="ext">.json</span></button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="main">
+  <nav class="sidebar" id="sidebar">
+    <div class="nav-section-label">Foundations</div>
+    <button class="nav-item active" data-section="colors">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="13.5" cy="6.5" r=".5"/><circle cx="17.5" cy="10.5" r=".5"/><circle cx="8.5" cy="7.5" r=".5"/><circle cx="6.5" cy="12.5" r=".5"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg>
+      Colors
+    </button>
+    <button class="nav-item" data-section="typography">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>
+      Typography
+    </button>
+    <button class="nav-item" data-section="radius">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="4"/></svg>
+      Border Radius
+    </button>
+    <button class="nav-item" data-section="shadows">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h18v18H3z" opacity=".2"/><path d="M7 7h10v10H7z"/></svg>
+      Shadows
+    </button>
+    <button class="nav-item" data-section="spacing">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+      Spacing
+    </button>
+    <div class="nav-section-label">Components</div>
+    <button class="nav-item" data-section="components">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      Components
+    </button>
+    <button class="nav-item" data-section="dividers">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/></svg>
+      Dividers
+    </button>
+    <button class="nav-item" data-section="dropdown">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      Dropdowns
+    </button>
+    <div class="nav-section-label">System</div>
+    <button class="nav-item" data-section="layout">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18"/><line x1="9" y1="3" x2="9" y2="21"/><line x1="15" y1="3" x2="15" y2="21"/></svg>
+      Layout
+    </button>
+    <button class="nav-item" data-section="themes">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0 0 0 20z" fill="currentColor"/></svg>
+      Theme Modes
+    </button>
+  </nav>
+
+  <section class="config-panel" id="configPanel"></section>
+
+  <section class="preview-panel">
+    <div class="preview-header">
+      <div class="preview-tabs">
+        <button class="preview-tab active" data-preview="light">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+          Light
+        </button>
+        <button class="preview-tab" data-preview="dark">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          Dark
+        </button>
+      </div>
+      <div class="preview-info">Live Preview · Updates Instantly</div>
+    </div>
+    <div class="preview-frame" id="previewFrame"></div>
+  </section>
+</div>
+
+<input type="file" id="fileInput" accept=".md,.json" style="display:none">
+<div class="toast-container" id="toastContainer"></div>
+
+<div class="modal-backdrop" id="modalBackdrop">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="modalTitle">Export</div>
+      <button class="icon-btn" id="modalClose">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="code-output" id="modalCode"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" id="modalCopy">Copy</button>
+      <button class="btn btn-primary" id="modalDownload">Download</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// DESIGN TOKEN BUILDER
+// ============================================================
+
+const FONTS = [
+  'Inter','Poppins','Roboto','Open Sans','Lato','Montserrat',
+  'Playfair Display','DM Sans','Space Grotesk','JetBrains Mono',
+  'Source Sans Pro','Merriweather','Nunito','Work Sans','Manrope',
+  'Outfit','Sora','Plus Jakarta Sans','Fraunces','Bricolage Grotesque'
+];
+
+const COLOR_TOKENS = [
+  { key: 'primary', name: 'Primary', desc: 'Main brand color' },
+  { key: 'secondary', name: 'Secondary', desc: 'Supporting brand color' },
+  { key: 'accent', name: 'Accent', desc: 'Highlight color' },
+  { key: 'background', name: 'Background', desc: 'Page background' },
+  { key: 'surface', name: 'Surface', desc: 'Card / panel background' },
+  { key: 'foreground', name: 'Foreground', desc: 'Primary text color' },
+  { key: 'muted', name: 'Muted', desc: 'Secondary text color' },
+  { key: 'border', name: 'Border', desc: 'Default border color' },
+  { key: 'success', name: 'Success', desc: 'Positive actions' },
+  { key: 'warning', name: 'Warning', desc: 'Cautionary actions' },
+  { key: 'error', name: 'Error', desc: 'Destructive actions' },
+  { key: 'info', name: 'Info', desc: 'Informational actions' },
+  { key: 'shadow', name: 'Shadow', desc: 'Shadow base color' }
+];
+
+const COMPONENT_LIST = [
+  { key: 'button', name: 'Button' },
+  { key: 'input', name: 'Input' },
+  { key: 'card', name: 'Card' },
+  { key: 'dialog', name: 'Dialog' },
+  { key: 'badge', name: 'Badge' },
+  { key: 'chip', name: 'Chip' },
+  { key: 'alert', name: 'Alert' },
+  { key: 'navbar', name: 'Navbar' },
+  { key: 'sidebar', name: 'Sidebar' }
+];
+
+const DEFAULT_STATE = {
+  meta: {
+    projectName: 'Aurora Design System',
+    author: 'Design Team',
+    version: '1.0.0',
+    description: 'A modern, accessible design system for building beautiful web interfaces.'
+  },
+  colors: {
+    light: {
+      primary: '#0d9488', secondary: '#f97316', accent: '#ec4899',
+      background: '#ffffff', surface: '#f8fafc', foreground: '#0f172a',
+      muted: '#64748b', border: '#e2e8f0', success: '#22c55e',
+      warning: '#f59e0b', error: '#ef4444', info: '#06b6d4', shadow: '#0f172a'
+    },
+    dark: {
+      primary: '#2dd4bf', secondary: '#fb923c', accent: '#f472b6',
+      background: '#0f172a', surface: '#1e293b', foreground: '#f1f5f9',
+      muted: '#94a3b8', border: '#334155', success: '#4ade80',
+      warning: '#fbbf24', error: '#f87171', info: '#22d3ee', shadow: '#000000'
+    }
+  },
+  typography: {
+    fontFamily: 'Inter', headingFont: 'Poppins',
+    baseSize: 16,
+    headingSizes: { h1: 48, h2: 36, h3: 28, h4: 24, h5: 20, h6: 18 },
+    weights: { normal: 400, medium: 500, semibold: 600, bold: 700 },
+    lineHeight: 1.6, headingLineHeight: 1.2,
+    letterSpacing: 0, paragraphSpacing: 16
+  },
+  radius: { xs: 2, sm: 4, md: 8, lg: 16, xl: 24, full: 9999 },
+  shadows: {
+    xs: { x: 0, y: 1, blur: 2, spread: 0, color: '#0f172a', opacity: 0.05 },
+    sm: { x: 0, y: 2, blur: 4, spread: 0, color: '#0f172a', opacity: 0.1 },
+    md: { x: 0, y: 4, blur: 12, spread: 0, color: '#0f172a', opacity: 0.15 },
+    lg: { x: 0, y: 8, blur: 24, spread: 0, color: '#0f172a', opacity: 0.2 },
+    xl: { x: 0, y: 16, blur: 48, spread: 0, color: '#0f172a', opacity: 0.25 }
+  },
+  spacing: { '4': 4, '8': 8, '12': 12, '16': 16, '24': 24, '32': 32, '48': 48, '64': 64 },
+  components: {
+    button: { radius: 'md', borderWidth: 0, borderColor: 'transparent', bg: 'primary', shadow: 'none', paddingX: 24, paddingY: 12, hoverBg: 'primary', activeBg: 'primary', disabledOpacity: 0.5 },
+    input: { radius: 'sm', borderWidth: 1, borderColor: 'border', bg: 'background', shadow: 'none', paddingX: 12, paddingY: 10, focusBorder: 'primary' },
+    card: { radius: 'lg', borderWidth: 1, borderColor: 'border', bg: 'surface', shadow: 'md', padding: 24 },
+    dialog: { radius: 'xl', borderWidth: 0, borderColor: 'transparent', bg: 'surface', shadow: 'xl', padding: 32 },
+    badge: { radius: 'sm', borderWidth: 0, bg: 'primary', paddingX: 8, paddingY: 4 },
+    chip: { radius: 'full', borderWidth: 1, borderColor: 'border', bg: 'surface', paddingX: 12, paddingY: 6 },
+    alert: { radius: 'md', borderWidth: 1, borderColor: 'border', bg: 'surface', padding: 16, shadow: 'none' },
+    navbar: { height: 64, bg: 'background', shadow: 'sm', borderWidth: 1, borderColor: 'border', paddingX: 24 },
+    sidebar: { width: 240, bg: 'surface', borderWidth: 1, borderColor: 'border', padding: 16 }
+  },
+  dividers: { thickness: 1, color: 'border', style: 'solid', spacing: 16 },
+  dropdown: {
+    label: 'Select an option', placeholder: 'Choose...',
+    options: ['Option 1', 'Option 2', 'Option 3'],
+    radius: 'sm', borderWidth: 1, borderColor: 'border', bg: 'surface',
+    hoverBg: 'surface', focusBorder: 'primary'
+  },
+  layout: {
+    containerWidth: 1200, gridColumns: 12, gutter: 24,
+    breakpoints: { mobile: 480, tablet: 768, laptop: 1024, desktop: 1280, wide: 1536 }
+  }
+};
+
+// ============================================================
+// STATE
+// ============================================================
+let state = loadState() || JSON.parse(JSON.stringify(DEFAULT_STATE));
+let activeSection = 'colors';
+let activeComponent = 'button';
+let editingTheme = 'light';
+let previewTheme = 'light';
+let pendingExport = null;
+
+function loadState() {
+  try {
+    const s = localStorage.getItem('designMD');
+    return s ? JSON.parse(s) : null;
+  } catch(e) { return null; }
+}
+function saveState() {
+  try { localStorage.setItem('designMD', JSON.stringify(state)); } catch(e) {}
+}
+
+// ============================================================
+// UTILITIES
+// ============================================================
+function hexToRgb(hex) {
+  hex = hex.replace('#', '');
+  if (hex.length === 3) hex = hex.split('').map(c => c+c).join('');
+  const num = parseInt(hex, 16);
+  return { r: (num>>16)&255, g: (num>>8)&255, b: num&255 };
+}
+function rgbToHsl(r, g, b) {
+  r /= 255; g /= 255; b /= 255;
+  const max = Math.max(r,g,b), min = Math.min(r,g,b);
+  let h, s, l = (max+min)/2;
+  if (max === min) { h = s = 0; }
+  else {
+    const d = max - min;
+    s = l > 0.5 ? d/(2-max-min) : d/(max+min);
+    switch(max) {
+      case r: h = (g-b)/d + (g<b?6:0); break;
+      case g: h = (b-r)/d + 2; break;
+      case b: h = (r-g)/d + 4; break;
+    }
+    h /= 6;
+  }
+  return { h: Math.round(h*360), s: Math.round(s*100), l: Math.round(l*100) };
+}
+function hexToRgba(hex, opacity) {
+  const { r, g, b } = hexToRgb(hex);
+  return `rgba(${r}, ${g}, ${b}, ${opacity})`;
+}
+function shadowToString(s) {
+  return `${s.x}px ${s.y}px ${s.blur}px ${s.spread}px ${hexToRgba(s.color, s.opacity)}`;
+}
+function loadFont(fontName) {
+  if (!fontName || FONTS.indexOf(fontName) === -1) return;
+  const id = 'font-' + fontName.replace(/[^a-zA-Z0-9]/g, '');
+  if (document.getElementById(id)) return;
+  const link = document.createElement('link');
+  link.id = id;
+  link.rel = 'stylesheet';
+  link.href = `https://fonts.googleapis.com/css2?family=${fontName.replace(/ /g, '+')}:wght@300;400;500;600;700;800&display=swap`;
+  document.head.appendChild(link);
+}
+function copyToClipboard(text) {
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(text).then(() => showToast('Copied to clipboard', 'success'));
+  } else {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    showToast('Copied to clipboard', 'success');
+  }
+}
+function downloadFile(filename, content, mime = 'text/plain') {
+  const blob = new Blob([content], { type: mime });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+  showToast(`Downloaded ${filename}`, 'success');
+}
+function showToast(msg, type = 'success') {
+  const container = document.getElementById('toastContainer');
+  const toast = document.createElement('div');
+  toast.className = `toast ${type}`;
+  toast.innerHTML = `<div class="toast-dot"></div><span>${msg}</span>`;
+  container.appendChild(toast);
+  setTimeout(() => toast.classList.add('show'), 10);
+  setTimeout(() => {
+    toast.classList.remove('show');
+    setTimeout(() => toast.remove(), 300);
+  }, 2400);
+}
+
+// ============================================================
+// RENDER: SIDEBAR & MAIN
+// ============================================================
+function setupSidebar() {
+  document.querySelectorAll('.nav-item').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeSection = btn.dataset.section;
+      renderConfig();
+    });
+  });
+}
+
+// ============================================================
+// RENDER: CONFIG PANEL
+// ============================================================
+function renderConfig() {
+  const panel = document.getElementById('configPanel');
+  const renderers = {
+    colors: renderColors, typography: renderTypography,
+    radius: renderRadius, shadows: renderShadows,
+    spacing: renderSpacing, components: renderComponents,
+    dividers: renderDividers, dropdown: renderDropdown,
+    layout: renderLayout, themes: renderThemes
+  };
+  panel.innerHTML = renderers[activeSection]();
+  bindConfigEvents();
+  renderPreview();
+}
+
+// ============================================================
+// SECTION: COLORS
+// ============================================================
+function renderColors() {
+  const colors = state.colors[editingTheme];
+  return `
+    <div class="panel-header">
+      <div class="panel-title">Color Palette</div>
+      <div class="panel-desc">Define the core color tokens for your design system. Each color is available in both light and dark themes.</div>
+    </div>
+    <div class="theme-tabs">
+      <button class="theme-tab ${editingTheme==='light'?'active':''}" data-edit-theme="light">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/></svg>
+        Light Theme
+      </button>
+      <button class="theme-tab ${editingTheme==='dark'?'active':''}" data-edit-theme="dark">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        Dark Theme
+      </button>
+    </div>
+    ${COLOR_TOKENS.map(t => {
+      const v = colors[t.key];
+      const rgb = hexToRgb(v);
+      const hsl = rgbToHsl(rgb.r, rgb.g, rgb.b);
+      return `
+        <div class="color-control" data-color-key="${t.key}">
+          <div class="color-swatch" style="background: ${v}">
+            <input type="color" value="${v}" data-action="pick-color">
+          </div>
+          <div class="color-meta">
+            <div class="color-name">${t.name}</div>
+            <div class="color-values">RGB ${rgb.r}, ${rgb.g}, ${rgb.b} · HSL ${hsl.h}, ${hsl.s}%, ${hsl.l}%</div>
+          </div>
+          <input type="text" class="color-hex" value="${v.toUpperCase()}" data-action="type-hex" maxlength="7">
+          <button class="icon-btn" data-action="copy-color" title="Copy hex">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          </button>
+        </div>
+      `;
+    }).join('')}
+  `;
+}
+
+// ============================================================
+// SECTION: TYPOGRAPHY
+// ============================================================
+function renderTypography() {
+  const t = state.typography;
+  const fontOptions = FONTS.map(f => `<option value="${f}" ${t.fontFamily===f?'selected':''}>${f}</option>`).join('');
+  const headingOptions = FONTS.map(f => `<option value="${f}" ${t.headingFont===f?'selected':''}>${f}</option>`).join('');
+  return `
+    <div class="panel-header">
+      <div class="panel-title">Typography</div>
+      <div class="panel-desc">Configure type system with Google Fonts integration and live preview.</div>
+    </div>
+    <div class="card-section">
+      <div class="card-section-title">Font Families</div>
+      <div class="form-group">
+        <label class="form-label">Body Font</label>
+        <select class="form-select" data-typo="fontFamily">${fontOptions}</select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Heading Font</label>
+        <select class="form-select" data-typo="headingFont">${headingOptions}</select>
+      </div>
+    </div>
+    <div class="card-section">
+      <div class="card-section-title">Base Settings</div>
+      <div class="form-group">
+        <label class="form-label">Base Font Size <span class="hint">px</span></label>
+        <div class="slider-row">
+          <input type="range" class="slider" min="12" max="20" value="${t.baseSize}" data-typo="baseSize">
+          <div class="slider-val">${t.baseSize}px</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Line Height</label>
+        <div class="slider-row">
+          <input type="range" class="slider" min="1" max="2" step="0.05" value="${t.lineHeight}" data-typo="lineHeight">
+          <div class="slider-val">${t.lineHeight}</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Heading Line Height</label>
+        <div class="slider-row">
+          <input type="range" class="slider" min="1" max="1.5" step="0.05" value="${t.headingLineHeight}" data-typo="headingLineHeight">
+          <div class="slider-val">${t.headingLineHeight}</div>
+        </div>
+      </div>
+      <div class="grid-2">
+        <div class="form-group">
+          <label class="form-label">Letter Spacing <span class="hint">px</span></label>
+          <div class="slider-row">
+            <input type="range" class="slider" min="-2" max="4" step="0.1" value="${t.letterSpacing}" data-typo="letterSpacing">
+            <div class="slider-val">${t.letterSpacing}</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Paragraph Spacing <span class="hint">px</span></label>
+          <div class="slider-row">
+            <input type="range" class="slider" min="0" max="40" value="${t.paragraphSpacing}" data-typo="paragraphSpacing">
+            <div class="slider-val">${t.paragraphSpacing}px</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-section">
+      <div class="card-section-title">Heading Scale</div>
+      ${['h1','h2','h3','h4','h5','h6'].map(h => `
+        <div class="form-group">
+          <label class="form-label">${h.toUpperCase()} Size <span class="hint">px</span></label>
+          <div class="slider-row">
+            <input type="range" class="slider" min="14" max="80" value="${t.headingSizes[h]}" data-heading-size="${h}">
+            <div class="slider-val">${t.headingSizes[h]}px</div>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+    <div class="card-section">
+      <div class="card-section-title">Font Weights</div>
+      <div class="grid-2">
+        ${Object.entries(t.weights).map(([k,v]) => `
+          <div class="form-group">
+            <label class="form-label">${k}</label>
+            <select class="form-select" data-weight="${k}">
+              ${[300,400,500,600,700,800,900].map(w => `<option value="${w}" ${v==w?'selected':''}>${w}</option>`).join('')}
+            </select>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+    <div class="card-section">
+      <div class="card-section-title">Live Preview</div>
+      <div class="type-preview" id="typePreview" style="font-family: '${t.fontFamily}', sans-serif;">
+        ${['h1','h2','h3','h4','h5','h6'].map(h => `
+          <div class="type-row">
+            <div class="type-meta">${h.toUpperCase()} · ${t.headingSizes[h]}px · ${t.weights.bold}</div>
+            <div style="font-family: '${t.headingFont}', sans-serif; font-size: ${t.headingSizes[h]}px; font-weight: ${t.weights.bold}; line-height: ${t.headingLineHeight}; letter-spacing: ${t.letterSpacing}px; color: #e8e8ec;">The quick brown fox</div>
+          </div>
+        `).join('')}
+        <div class="type-row">
+          <div class="type-meta">Body · ${t.baseSize}px · ${t.weights.normal} · LH ${t.lineHeight}</div>
+          <p style="font-size: ${t.baseSize}px; font-weight: ${t.weights.normal}; line-height: ${t.lineHeight}; letter-spacing: ${t.letterSpacing}px; color: #d8d8e0; margin-bottom: ${t.paragraphSpacing}px;">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+          <p style="font-size: ${t.baseSize}px; color: #8888a0;">Second paragraph demonstrates spacing between paragraphs.</p>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+// ============================================================
+// SECTION: RADIUS
+// ============================================================
+function renderRadius() {
+  const r = state.radius;
+  return `
+    <div class="panel-header">
+      <div class="panel-title">Border Radius</div>
+      <div class="panel-desc">Define corner radius scale used across all components.</div>
+    </div>
+    <div class="card-section">
+      ${Object.entries(r).map(([k,v]) => `
+        <div class="form-group">
+          <label class="form-label">${k.toUpperCase()} <span class="hint">${v === 9999 ? 'pill' : 'px'}</span></label>
+          <div class="slider-row">
+            <input type="range" class="slider" min="0" max="${k==='full'?9999:48}" value="${v}" data-radius="${k}">
+            <div class="slider-val">${v === 9999 ? '∞' : v + 'px'}</div>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+    <div class="card-section">
+      <div class="card-section-title">Visual Preview</div>
+      <div class="radius-grid">
+        ${Object.entries(r).map(([k,v]) => `
+          <div class="radius-card">
+            <div class="radius-box" style="border-radius: ${v === 9999 ? '9999px' : v + 'px'}"></div>
+            <div class="radius-label">${k} · ${v === 9999 ? 'full' : v + 'px'}</div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `;
+}
+
+// ============================================================
+// SECTION: SHADOWS
+// ============================================================
+function renderShadows() {
+  return `
+    <div class="panel-header">
+      <div class="panel-title">Shadow System</div>
+      <div class="panel-desc">Configure elevation levels with offset, blur, spread, color and opacity.</div>
+    </div>
+    ${Object.entries(state.shadows).map(([k, s]) => `
+      <div class="card-section">
+        <div class="card-section-title">Shadow ${k.toUpperCase()}</div>
+        <div class="grid-2">
+          <div class="form-group">
+            <label class="form-label">X Offset <span class="hint">px</span></label>
+            <div class="slider-row">
+              <input type="range" class="slider" min="-20" max="20" value="${s.x}" data-shadow="${k}" data-prop="x">
+              <div class="slider-val">${s.x}px</div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Y Offset <span class="hint">px</span></label>
+            <div class="slider-row">
+              <input type="range" class="slider" min="-20" max="20" value="${s.y}" data-shadow="${k}" data-prop="y">
+              <div class="slider-val">${s.y}px</div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Blur <span class="hint">px</span></label>
+            <div class="slider-row">
+              <input type="range" class="slider" min="0" max="80" value="${s.blur}" data-shadow="${k}" data-prop="blur">
+              <div class="slider-val">${s.blur}px</div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Spread <span class="hint">px</span></label>
+            <div class="slider-row">
+              <input type="range" class="slider" min="-20" max="20" value="${s.spread}" data-shadow="${k}" data-prop="spread">
+              <div class="slider-val">${s.spread}px</div>
+            </div>
+          </div>
+        </div>
+        <div class="grid-2">
+          <div class="form-group">
+            <label class="form-label">Color</label>
+            <div class="color-control" style="margin-bottom: 0;">
+              <div class="color-swatch" style="background: ${s.color}">
+                <input type="color" value="${s.color}" data-shadow="${k}" data-prop="color">
+              </div>
+              <input type="text" class="color-hex" value="${s.color.toUpperCase()}" data-shadow="${k}" data-prop="color-hex" maxlength="7">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Opacity</label>
+            <div class="slider-row">
+              <input type="range" class="slider" min="0" max="1" step="0.01" value="${s.opacity}" data-shadow="${k}" data-prop="opacity">
+              <div class="slider-val">${s.opacity}</div>
+            </div>
+          </div>
+        </div>
+        <div style="background: #0a0a0c; padding: 24px; border-radius: 8px; margin-top: 8px; text-align: center;">
+          <div style="display: inline-block; width: 80px; height: 50px; background: #fff; border-radius: 6px; box-shadow: ${shadowToString(s)};"></div>
+        </div>
+      </div>
+    `).join('')}
+  `;
+}
+
+// ============================================================
+// SECTION: SPACING
+// ============================================================
+function renderSpacing() {
+  return `
+    <div class="panel-header">
+      <div class="panel-title">Spacing System</div>
+      <div class="panel-desc">Define spacing scale based on a base unit. Used for padding, margin, and gap.</div>
+    </div>
+    <div class="card-section">
+      ${Object.entries(state.spacing).map(([k,v]) => `
+        <div class="form-group">
+          <label class="form-label">Space ${k} <span class="hint">px</span></label>
+          <div class="slider-row">
+            <input type="range" class="slider" min="0" max="96" value="${v}" data-spacing="${k}">
+            <div class="slider-val">${v}px</div>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+    <div class="card-section">
+      <div class="card-section-title">Spacing Scale</div>
+      <div class="spacing-list">
+        ${Object.entries(state.spacing).map(([k,v]) => `
+          <div class="spacing-row">
+            <div class="spacing-label">s${k}</div>
+            <div class="spacing-bar" style="width: ${Math.min(v * 1.5, 200)}px;"></div>
+            <div class="spacing-val">${v}px</div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `;
+}
+
+// ============================================================
+// SECTION: COMPONENTS
+// ============================================================
+function renderComponents() {
+  const c = state.components[activeComponent];
+  const radiusOpts = ['none','xs','sm','md','lg','xl','full'];
+  const shadowOpts = ['none','xs','sm','md','lg','xl'];
+  const colorOpts = ['primary','secondary','accent','background','surface','foreground','muted','border','success','warning','error','info','transparent'];
+
+  const fieldsByComp = {
+    button: ['radius','borderWidth','borderColor','bg','shadow','paddingX','paddingY','hoverBg','activeBg','disabledOpacity'],
+    input: ['radius','borderWidth','borderColor','bg','shadow','paddingX','paddingY','focusBorder'],
+    card: ['radius','borderWidth','borderColor','bg','shadow','padding'],
+    dialog: ['radius','borderWidth','borderColor','bg','shadow','padding'],
+    badge: ['radius','borderWidth','bg','paddingX','paddingY'],
+    chip: ['radius','borderWidth','borderColor','bg','paddingX','paddingY'],
+    alert: ['radius','borderWidth','borderColor','bg','shadow','padding'],
+    navbar: ['height','bg','shadow','borderWidth','borderColor','paddingX'],
+    sidebar: ['width','bg','borderWidth','borderColor','padding']
+  };
+
+  const fields = fieldsByComp[activeComponent] || [];
+
+  const fieldHTML = fields.map(f => {
+    if (['radius'].includes(f)) {
+      return `<div class="form-group"><label class="form-label">Radius</label><select class="form-select" data-comp-prop="${f}">${radiusOpts.map(o => `<option value="${o}" ${c[f]===o?'selected':''}>${o}</option>`).join('')}</select></div>`;
+    }
+    if (['shadow'].includes(f)) {
+      return `<div class="form-group"><label class="form-label">Shadow</label><select class="form-select" data-comp-prop="${f}">${shadowOpts.map(o => `<option value="${o}" ${c[f]===o?'selected':''}>${o}</option>`).join('')}</select></div>`;
+    }
+    if (['borderColor','bg','hoverBg','activeBg','focusBorder'].includes(f)) {
+      return `<div class="form-group"><label class="form-label">${f.replace(/([A-Z])/g,' $1').replace(/^./,s=>s.toUpperCase())}</label><select class="form-select" data-comp-prop="${f}">${colorOpts.map(o => `<option value="${o}" ${c[f]===o?'selected':''}>${o}</option>`).join('')}</select></div>`;
+    }
+    if (['borderWidth','paddingX','paddingY','padding','height','width','disabledOpacity'].includes(f)) {
+      const max = f === 'disabledOpacity' ? 1 : (f === 'borderWidth' ? 6 : 100);
+      const step = f === 'disabledOpacity' ? 0.05 : 1;
+      const unit = f === 'disabledOpacity' ? '' : 'px';
+      return `<div class="form-group"><label class="form-label">${f.replace(/([A-Z])/g,' $1').replace(/^./,s=>s.toUpperCase())} <span class="hint">${unit}</span></label><div class="slider-row"><input type="range" class="slider" min="0" max="${max}" step="${step}" value="${c[f]}" data-comp-prop="${f}"><div class="slider-val">${c[f]}${unit}</div></div></div>`;
+    }
+    return '';
+  }).join('');
+
+  return `
+    <div class="panel-header">
+      <div class="panel-title">Components</div>
+      <div class="panel-desc">Customize the appearance and behavior of UI components.</div>
+    </div>
+    <div class="comp-tabs">
+      ${COMPONENT_LIST.map(c => `<button class="comp-tab ${activeComponent===c.key?'active':''}" data-comp-tab="${c.key}">${c.name}</button>`).join('')}
+    </div>
+    <div class="card-section">
+      <div class="card-section-title">${COMPONENT_LIST.find(c=>c.key===activeComponent).name} Style</div>
+      ${fieldHTML}
+    </div>
+    <div class="card-section">
+      <div class="card-section-title">Component States</div>
+      <p style="color: #6a6a78; font-size: 11px; line-height: 1.5;">Hover, active, and disabled states inherit from the base style with automatic adjustments. Override colors above to customize.</p>
+    </div>
+  `;
+}
+
+// ============================================================
+// SECTION: DIVIDERS
+// ============================================================
+function renderDividers() {
+  const d = state.dividers;
+  return `
+    <div class="panel-header">
+      <div class="panel-title">Divider Settings</div>
+      <div class="panel-desc">Configure horizontal and vertical dividers used to separate content.</div>
+    </div>
+    <div class="card-section">
+      <div class="form-group">
+        <label class="form-label">Thickness <span class="hint">px</span></label>
+        <div class="slider-row">
+          <input type="range" class="slider" min="1" max="8" value="${d.thickness}" data-divider="thickness">
+          <div class="slider-val">${d.thickness}px</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Color</label>
+        <select class="form-select" data-divider="color">
+          ${['primary','secondary','accent','background','surface','foreground','muted','border','success','warning','error','info'].map(o => `<option value="${o}" ${d.color===o?'selected':''}>${o}</option>`).join('')}
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Style</label>
+        <select class="form-select" data-divider="style">
+          <option value="solid" ${d.style==='solid'?'selected':''}>Solid</option>
+          <option value="dashed" ${d.style==='dashed'?'selected':''}>Dashed</option>
+          <option value="dotted" ${d.style==='dotted'?'selected':''}>Dotted</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Spacing <span class="hint">px</span></label>
+        <div class="slider-row">
+          <input type="range" class="slider" min="0" max="64" value="${d.spacing}" data-divider="spacing">
+          <div class="slider-val">${d.spacing}px</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-section">
+      <div class="card-section-title">Preview</div>
+      <div style="padding: 20px 0;">
+        <div style="margin-bottom: ${d.spacing}px; color: #8888a0; font-size: 12px;">Content above</div>
+        <hr style="border: none; border-top: ${d.thickness}px ${d.style} #e2e8f0; margin: 0;">
+        <div style="margin-top: ${d.spacing}px; color: #8888a0; font-size: 12px;">Content below</div>
+      </div>
+    </div>
+  `;
+}
+
+// ============================================================
+// SECTION: DROPDOWN
+// ============================================================
+function renderDropdown() {
+  const d = state.dropdown;
+  return `
+    <div class="panel-header">
+      <div class="panel-title">Dropdown Configuration</div>
+      <div class="panel-desc">Define dropdown component structure, options, and interaction states.</div>
+    </div>
+    <div class="card-section">
+      <div class="card-section-title">Configuration</div>
+      <div class="form-group">
+        <label class="form-label">Label</label>
+        <input type="text" class="form-input" value="${d.label}" data-dropdown="label">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Placeholder</label>
+        <input type="text" class="form-input" value="${d.placeholder}" data-dropdown="placeholder">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Options (one per line)</label>
+        <textarea class="form-textarea" data-dropdown="options">${d.options.join('\n')}</textarea>
+      </div>
+    </div>
+    <div class="card-section">
+      <div class="card-section-title">Visual Style</div>
+      <div class="grid-2">
+        <div class="form-group">
+          <label class="form-label">Radius</label>
+          <select class="form-select" data-dropdown="radius">
+            ${['none','xs','sm','md','lg','xl','full'].map(o => `<option value="${o}" ${d.radius===o?'selected':''}>${o}</option>`).join('')}
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Background</label>
+          <select class="form-select" data-dropdown="bg">
+            ${['primary','secondary','accent','background','surface','foreground','muted','border','transparent'].map(o => `<option value="${o}" ${d.bg===o?'selected':''}>${o}</option>`).join('')}
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Border Color</label>
+          <select class="form-select" data-dropdown="borderColor">
+            ${['primary','secondary','accent','background','surface','foreground','muted','border','success','warning','error','info','transparent'].map(o => `<option value="${o}" ${d.borderColor===o?'selected':''}>${o}</option>`).join('')}
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Border Width <span class="hint">px</span></label>
+          <div class="slider-row">
+            <input type="range" class="slider" min="0" max="4" value="${d.borderWidth}" data-dropdown="borderWidth">
+            <div class="slider-val">${d.borderWidth}px</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Hover Background</label>
+          <select class="form-select" data-dropdown="hoverBg">
+            ${['primary','secondary','accent','background','surface','foreground','muted','border','transparent'].map(o => `<option value="${o}" ${d.hoverBg===o?'selected':''}>${o}</option>`).join('')}
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Focus Border</label>
+          <select class="form-select" data-dropdown="focusBorder">
+            ${['primary','secondary','accent','background','surface','foreground','muted','border','success','warning','error','info','transparent'].map(o => `<option value="${o}" ${d.focusBorder===o?'selected':''}>${o}</option>`).join('')}
+          </select>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+// ============================================================
+// SECTION: LAYOUT
+// ============================================================
+function renderLayout() {
+  const l = state.layout;
+  return `
+    <div class="panel-header">
+      <div class="panel-title">Layout System</div>
+      <div class="panel-desc">Configure container, grid, and responsive breakpoints.</div>
+    </div>
+    <div class="card-section">
+      <div class="card-section-title">Container & Grid</div>
+      <div class="form-group">
+        <label class="form-label">Container Width <span class="hint">px</span></label>
+        <div class="slider-row">
+          <input type="range" class="slider" min="960" max="1600" step="16" value="${l.containerWidth}" data-layout="containerWidth">
+          <div class="slider-val">${l.containerWidth}px</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Grid Columns</label>
+        <div class="slider-row">
+          <input type="range" class="slider" min="6" max="24" value="${l.gridColumns}" data-layout="gridColumns">
+          <div class="slider-val">${l.gridColumns}</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Gutter Spacing <span class="hint">px</span></label>
+        <div class="slider-row">
+          <input type="range" class="slider" min="0" max="48" value="${l.gutter}" data-layout="gutter">
+          <div class="slider-val">${l.gutter}px</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-section">
+      <div class="card-section-title">Breakpoints</div>
+      ${Object.entries(l.breakpoints).map(([k,v]) => `
+        <div class="bp-row">
+          <div style="font-size: 12px; color: #d8d8e0; text-transform: capitalize;">${k}</div>
+          <input type="range" class="slider" min="320" max="1920" step="16" value="${v}" data-breakpoint="${k}">
+          <div class="slider-val">${v}px</div>
+        </div>
+      `).join('')}
+    </div>
+    <div class="card-section">
+      <div class="card-section-title">Grid Preview</div>
+      <div style="display: grid; grid-template-columns: repeat(${l.gridColumns}, 1fr); gap: ${Math.min(l.gutter, 16)}px;">
+        ${Array.from({length: l.gridColumns}, (_,i) => `<div style="background: linear-gradient(180deg, #d4ff3d, #84cc16); height: 32px; border-radius: 3px; opacity: ${0.3 + (i % 4) * 0.15};"></div>`).join('')}
+      </div>
+    </div>
+  `;
+}
+
+// ============================================================
+// SECTION: THEMES
+// ============================================================
+function renderThemes() {
+  return `
+    <div class="panel-header">
+      <div class="panel-title">Theme Modes</div>
+      <div class="panel-desc">Manage light and dark theme tokens. Each theme maintains independent color values.</div>
+    </div>
+    <div class="card-section">
+      <div class="card-section-title">Theme Status</div>
+      <div class="grid-2">
+        <div style="background: #181820; padding: 14px; border-radius: 8px; border: 1px solid #26262e;">
+          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px;">
+            <div style="width: 24px; height: 24px; background: ${state.colors.light.background}; border: 1px solid ${state.colors.light.border}; border-radius: 4px;"></div>
+            <strong style="font-size: 13px;">Light Theme</strong>
+          </div>
+          <div style="display: flex; gap: 4px; flex-wrap: wrap;">
+            ${Object.values(state.colors.light).slice(0, 8).map(c => `<div style="width: 16px; height: 16px; background: ${c}; border-radius: 3px; border: 1px solid rgba(255,255,255,0.1);"></div>`).join('')}
+          </div>
+          <button class="btn" style="width: 100%; margin-top: 10px;" data-go-colors="light">Edit Light Colors</button>
+        </div>
+        <div style="background: #181820; padding: 14px; border-radius: 8px; border: 1px solid #26262e;">
+          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px;">
+            <div style="width: 24px; height: 24px; background: ${state.colors.dark.background}; border: 1px solid ${state.colors.dark.border}; border-radius: 4px;"></div>
+            <strong style="font-size: 13px;">Dark Theme</strong>
+          </div>
+          <div style="display: flex; gap: 4px; flex-wrap: wrap;">
+            ${Object.values(state.colors.dark).slice(0, 8).map(c => `<div style="width: 16px; height: 16px; background: ${c}; border-radius: 3px; border: 1px solid rgba(255,255,255,0.1);"></div>`).join('')}
+          </div>
+          <button class="btn" style="width: 100%; margin-top: 10px;" data-go-colors="dark">Edit Dark Colors</button>
+        </div>
+      </div>
+    </div>
+    <div class="card-section">
+      <div class="card-section-title">Project Information</div>
+      <div class="form-group">
+        <label class="form-label">Project Name</label>
+        <input type="text" class="form-input" value="${state.meta.projectName}" data-meta="projectName">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Author</label>
+        <input type="text" class="form-input" value="${state.meta.author}" data-meta="author">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Version</label>
+        <input type="text" class="form-input" value="${state.meta.version}" data-meta="version">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Description</label>
+        <textarea class="form-textarea" data-meta="description">${state.meta.description}</textarea>
+      </div>
+    </div>
+  `;
+}
+
+// ============================================================
+// CONFIG EVENT BINDING
+// ============================================================
+function bindConfigEvents() {
+  const panel = document.getElementById('configPanel');
+
+  // Theme tabs (colors section)
+  panel.querySelectorAll('[data-edit-theme]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      editingTheme = btn.dataset.editTheme;
+      renderConfig();
+    });
+  });
+
+  // Go to colors from themes
+  panel.querySelectorAll('[data-go-colors]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      editingTheme = btn.dataset.goColors;
+      document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+      document.querySelector('[data-section="colors"]').classList.add('active');
+      activeSection = 'colors';
+      renderConfig();
+    });
+  });
+
+  // Color picker
+  panel.querySelectorAll('[data-action="pick-color"]').forEach(input => {
+    input.addEventListener('input', e => {
+      const key = e.target.closest('[data-color-key]').dataset.colorKey;
+      state.colors[editingTheme][key] = e.target.value;
+      saveState();
+      updateColorControl(e.target.closest('.color-control'), e.target.value);
+      renderPreview();
+    });
+  });
+  panel.querySelectorAll('[data-action="type-hex"]').forEach(input => {
+    input.addEventListener('input', e => {
+      let v = e.target.value;
+      if (!v.startsWith('#')) v = '#' + v;
+      if (/^#[0-9a-fA-F]{6}$/.test(v) || /^#[0-9a-fA-F]{3}$/.test(v)) {
+        const key = e.target.closest('[data-color-key]').dataset.colorKey;
+        state.colors[editingTheme][key] = v;
+        saveState();
+        updateColorControl(e.target.closest('.color-control'), v);
+        renderPreview();
+      }
+    });
+  });
+  panel.querySelectorAll('[data-action="copy-color"]').forEach(btn => {
+    btn.addEventListener('click', e => {
+      const key = e.target.closest('[data-color-key]').dataset.colorKey;
+      copyToClipboard(state.colors[editingTheme][key].toUpperCase());
+    });
+  });
+
+  // Typography
+  panel.querySelectorAll('[data-typo]').forEach(el => {
+    el.addEventListener('input', e => {
+      const prop = el.dataset.typo;
+      const val = el.type === 'range' ? parseFloat(el.value) : el.value;
+      state.typography[prop] = val;
+      if (prop === 'fontFamily' || prop === 'headingFont') loadFont(val);
+      saveState();
+      renderConfig();
+    });
+  });
+  panel.querySelectorAll('[data-heading-size]').forEach(el => {
+    el.addEventListener('input', e => {
+      state.typography.headingSizes[el.dataset.headingSize] = parseInt(el.value);
+      saveState();
+      renderConfig();
+    });
+  });
+  panel.querySelectorAll('[data-weight]').forEach(el => {
+    el.addEventListener('change', e => {
+      state.typography.weights[el.dataset.weight] = parseInt(el.value);
+      saveState();
+      renderConfig();
+    });
+  });
+
+  // Radius
+  panel.querySelectorAll('[data-radius]').forEach(el => {
+    el.addEventListener('input', e => {
+      state.radius[el.dataset.radius] = parseInt(el.value);
+      saveState();
+      renderConfig();
+    });
+  });
+
+  // Shadows
+  panel.querySelectorAll('[data-shadow]').forEach(el => {
+    el.addEventListener('input', e => {
+      const k = el.dataset.shadow;
+      const prop = el.dataset.prop;
+      if (prop === 'color' || prop === 'color-hex') {
+        let v = el.value;
+        if (prop === 'color-hex') {
+          if (!v.startsWith('#')) v = '#' + v;
+          if (!/^#[0-9a-fA-F]{6}$/.test(v)) return;
+        }
+        state.shadows[k].color = v;
+        if (prop === 'color') {
+          const hexInput = el.closest('.color-control').querySelector('[data-prop="color-hex"]');
+          if (hexInput) hexInput.value = v.toUpperCase();
+          el.closest('.color-swatch').style.background = v;
+        }
+      } else {
+        state.shadows[k][prop] = parseFloat(el.value);
+      }
+      saveState();
+      renderConfig();
+    });
+  });
+
+  // Spacing
+  panel.querySelectorAll('[data-spacing]').forEach(el => {
+    el.addEventListener('input', e => {
+      state.spacing[el.dataset.spacing] = parseInt(el.value);
+      saveState();
+      renderConfig();
+    });
+  });
+
+  // Component tabs
+  panel.querySelectorAll('[data-comp-tab]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      activeComponent = btn.dataset.compTab;
+      renderConfig();
+    });
+  });
+
+  // Component props
+  panel.querySelectorAll('[data-comp-prop]').forEach(el => {
+    const eventType = el.tagName === 'SELECT' ? 'change' : 'input';
+    el.addEventListener(eventType, e => {
+      const prop = el.dataset.compProp;
+      const val = el.type === 'range' ? (prop === 'disabledOpacity' ? parseFloat(el.value) : parseInt(el.value)) : el.value;
+      state.components[activeComponent][prop] = val;
+      saveState();
+      if (el.type === 'range') {
+        const valEl = el.parentElement.querySelector('.slider-val');
+        if (valEl) valEl.textContent = val + (prop === 'disabledOpacity' ? '' : 'px');
+      }
+      renderPreview();
+    });
+  });
+
+  // Dividers
+  panel.querySelectorAll('[data-divider]').forEach(el => {
+    const eventType = el.tagName === 'SELECT' ? 'change' : 'input';
+    el.addEventListener(eventType, e => {
+      const prop = el.dataset.divider;
+      const val = el.type === 'range' ? parseInt(el.value) : el.value;
+      state.dividers[prop] = val;
+      saveState();
+      renderConfig();
+      renderPreview();
+    });
+  });
+
+  // Dropdown
+  panel.querySelectorAll('[data-dropdown]').forEach(el => {
+    const eventType = el.tagName === 'TEXTAREA' || el.tagName === 'INPUT' ? 'input' : (el.tagName === 'SELECT' ? 'change' : 'input');
+    el.addEventListener(eventType, e => {
+      const prop = el.dataset.dropdown;
+      if (prop === 'options') {
+        state.dropdown.options = el.value.split('\n').filter(s => s.trim());
+      } else if (el.type === 'range') {
+        state.dropdown[prop] = parseInt(el.value);
+      } else {
+        state.dropdown[prop] = el.value;
+      }
+      saveState();
+      if (prop === 'options' || el.type === 'range') renderConfig();
+      renderPreview();
+    });
+  });
+
+  // Layout
+  panel.querySelectorAll('[data-layout]').forEach(el => {
+    el.addEventListener('input', e => {
+      const prop = el.dataset.layout;
+      state.layout[prop] = parseInt(el.value);
+      saveState();
+      renderConfig();
+      renderPreview();
+    });
+  });
+  panel.querySelectorAll('[data-breakpoint]').forEach(el => {
+    el.addEventListener('input', e => {
+      state.layout.breakpoints[el.dataset.breakpoint] = parseInt(el.value);
+      saveState();
+      const valEl = el.parentElement.querySelector('.slider-val');
+      if (valEl) valEl.textContent = el.value + 'px';
+    });
+  });
+
+  // Meta
+  panel.querySelectorAll('[data-meta]').forEach(el => {
+    el.addEventListener('input', e => {
+      state.meta[el.dataset.meta] = el.value;
+      if (el.dataset.meta === 'projectName') {
+        document.getElementById('projectName').value = el.value;
+      }
+      saveState();
+    });
+  });
+}
+
+function updateColorControl(control, value) {
+  const swatch = control.querySelector('.color-swatch');
+  const hexInput = control.querySelector('.color-hex');
+  const valuesDiv = control.querySelector('.color-values');
+  if (swatch) swatch.style.background = value;
+  if (hexInput) hexInput.value = value.toUpperCase();
+  if (valuesDiv) {
+    const rgb = hexToRgb(value);
+    const hsl = rgbToHsl(rgb.r, rgb.g, rgb.b);
+    valuesDiv.textContent = `RGB ${rgb.r}, ${rgb.g}, ${rgb.b} · HSL ${hsl.h}, ${hsl.s}%, ${hsl.l}%`;
+  }
+}
+
+// ============================================================
+// PREVIEW
+// ============================================================
+function renderPreview() {
+  const frame = document.getElementById('previewFrame');
+  const colors = state.colors[previewTheme];
+  const t = state.typography;
+  const r = state.radius;
+  const sh = state.shadows;
+  const sp = state.spacing;
+  const comp = state.components;
+  const dv = state.dividers;
+  const dd = state.dropdown;
+  const layout = state.layout;
+
+  // Apply CSS vars to frame
+  const cssVars = `
+    --pv-primary: ${colors.primary};
+    --pv-secondary: ${colors.secondary};
+    --pv-accent: ${colors.accent};
+    --pv-bg: ${colors.background};
+    --pv-surface: ${colors.surface};
+    --pv-text: ${colors.foreground};
+    --pv-muted: ${colors.muted};
+    --pv-border: ${colors.border};
+    --pv-success: ${colors.success};
+    --pv-warning: ${colors.warning};
+    --pv-error: ${colors.error};
+    --pv-info: ${colors.info};
+    --pv-shadow: ${colors.shadow};
+    --pv-font: '${t.fontFamily}', sans-serif;
+    --pv-heading-font: '${t.headingFont}', sans-serif;
+    --pv-base-size: ${t.baseSize}px;
+    --pv-line-height: ${t.lineHeight};
+    --pv-heading-lh: ${t.headingLineHeight};
+    --pv-letter-spacing: ${t.letterSpacing}px;
+    --pv-para-spacing: ${t.paragraphSpacing}px;
+    --pv-radius-xs: ${r.xs}px;
+    --pv-radius-sm: ${r.sm}px;
+    --pv-radius-md: ${r.md}px;
+    --pv-radius-lg: ${r.lg}px;
+    --pv-radius-xl: ${r.xl}px;
+    --pv-radius-full: ${r.full}px;
+    --pv-shadow-xs: ${shadowToString(sh.xs)};
+    --pv-shadow-sm: ${shadowToString(sh.sm)};
+    --pv-shadow-md: ${shadowToString(sh.md)};
+    --pv-shadow-lg: ${shadowToString(sh.lg)};
+    --pv-shadow-xl: ${shadowToString(sh.xl)};
+    --pv-divider: ${dv.thickness}px ${dv.style} ${colors[dv.color] || dv.color};
+    --pv-container: ${layout.containerWidth}px;
+  `;
+
+  frame.style.cssText = cssVars;
+  frame.className = 'preview-frame' + (previewTheme === 'dark' ? ' dark' : '');
+
+  const radiusVal = (k) => k === 'none' ? '0' : (k === 'full' ? '9999px' : (r[k] || 0) + 'px');
+  const shadowVal = (k) => k === 'none' ? 'none' : shadowToString(sh[k]);
+  const colorVal = (k) => k === 'transparent' ? 'transparent' : (colors[k] || k);
+
+  const btnRadius = radiusVal(comp.button.radius);
+  const btnShadow = shadowVal(comp.button.shadow);
+  const inputRadius = radiusVal(comp.input.radius);
+  const cardRadius = radiusVal(comp.card.radius);
+  const cardShadow = shadowVal(comp.card.shadow);
+  const alertRadius = radiusVal(comp.alert.radius);
+
+  frame.innerHTML = `
+    <style>
+      .pv-page { font-family: var(--pv-font); background: var(--pv-bg); color: var(--pv-text); font-size: var(--pv-base-size); line-height: var(--pv-line-height); letter-spacing: var(--pv-letter-spacing); }
+      .pv-page * { box-sizing: border-box; }
+      .pv-container { max-width: var(--pv-container); margin: 0 auto; padding: 0 ${sp['24']}px; }
+      .pv-navbar { background: ${colorVal(comp.navbar.bg)}; border-bottom: ${comp.navbar.borderWidth}px solid ${colorVal(comp.navbar.borderColor)}; box-shadow: ${shadowVal(comp.navbar.shadow)}; padding: 0 ${comp.navbar.paddingX}px; height: ${comp.navbar.height}px; display: flex; align-items: center; position: sticky; top: 0; z-index: 10; }
+      .pv-navbar-inner { display: flex; align-items: center; justify-content: space-between; width: 100%; max-width: var(--pv-container); margin: 0 auto; }
+      .pv-brand-name { font-family: var(--pv-heading-font); font-weight: 700; font-size: 18px; color: var(--pv-primary); }
+      .pv-nav-links { display: flex; gap: ${sp['24']}px; }
+      .pv-nav-links a { color: var(--pv-muted); text-decoration: none; font-size: 14px; font-weight: 500; transition: color 0.15s; }
+      .pv-nav-links a:hover { color: var(--pv-text); }
+      .pv-hero { padding: ${sp['48']}px 0 ${sp['48']}px; text-align: center; }
+      .pv-hero h1 { font-family: var(--pv-heading-font); font-size: ${t.headingSizes.h1}px; font-weight: ${t.weights.bold}; line-height: var(--pv-heading-lh); margin-bottom: ${sp['16']}px; color: var(--pv-text); }
+      .pv-hero p { font-size: ${t.baseSize + 4}px; color: var(--pv-muted); max-width: 600px; margin: 0 auto ${sp['24']}px; }
+      .pv-section { padding: ${sp['32']}px 0; }
+      .pv-section h2 { font-family: var(--pv-heading-font); font-size: ${t.headingSizes.h2}px; font-weight: ${t.weights.bold}; line-height: var(--pv-heading-lh); margin-bottom: ${sp['16']}px; }
+      .pv-section h3 { font-family: var(--pv-heading-font); font-size: ${t.headingSizes.h3}px; font-weight: ${t.weights.semibold}; line-height: var(--pv-heading-lh); margin-bottom: ${sp['8']}px; }
+      .pv-btn { display: inline-flex; align-items: center; gap: 6px; padding: ${comp.button.paddingY}px ${comp.button.paddingX}px; background: ${colorVal(comp.button.bg)}; color: ${comp.button.bg === 'primary' || comp.button.bg === 'secondary' || comp.button.bg === 'accent' || comp.button.bg === 'success' || comp.button.bg === 'error' || comp.button.bg === 'warning' || comp.button.bg === 'info' ? (previewTheme === 'dark' ? '#0f172a' : '#fff') : 'var(--pv-text)'}; border: ${comp.button.borderWidth}px solid ${colorVal(comp.button.borderColor)}; border-radius: ${btnRadius}; box-shadow: ${btnShadow}; font-family: var(--pv-font); font-size: 14px; font-weight: ${t.weights.medium}; cursor: pointer; transition: all 0.15s; text-decoration: none; }
+      .pv-btn:hover { filter: brightness(0.92); }
+      .pv-btn:active { filter: brightness(0.85); }
+      .pv-btn:disabled { opacity: ${comp.button.disabledOpacity}; cursor: not-allowed; }
+      .pv-btn-outline { background: transparent; color: var(--pv-primary); border: 1px solid var(--pv-primary); }
+      .pv-btn-ghost { background: transparent; color: var(--pv-text); border: 1px solid var(--pv-border); }
+      .pv-btn-secondary { background: var(--pv-secondary); color: #fff; }
+      .pv-btn-accent { background: var(--pv-accent); color: #fff; }
+      .pv-hero-actions { display: flex; gap: ${sp['12']}px; justify-content: center; }
+      .pv-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: ${sp['24']}px; }
+      .pv-card { background: ${colorVal(comp.card.bg)}; border: ${comp.card.borderWidth}px solid ${colorVal(comp.card.borderColor)}; border-radius: ${cardRadius}; box-shadow: ${cardShadow}; padding: ${comp.card.padding}px; transition: transform 0.2s, box-shadow 0.2s; }
+      .pv-card:hover { transform: translateY(-2px); box-shadow: ${shadowVal('lg')}; }
+      .pv-card-icon { width: 40px; height: 40px; background: var(--pv-primary); border-radius: ${radiusVal('md')}; display: grid; place-items: center; color: #fff; font-weight: 700; margin-bottom: ${sp['12']}px; font-family: var(--pv-heading-font); }
+      .pv-card p { color: var(--pv-muted); font-size: 14px; }
+      .pv-form { display: grid; grid-template-columns: 1fr 1fr; gap: ${sp['16']}px; max-width: 700px; }
+      .pv-form-row { display: flex; flex-direction: column; gap: 6px; }
+      .pv-form-row.full { grid-column: 1 / -1; }
+      .pv-form-row label { font-size: 13px; font-weight: ${t.weights.medium}; color: var(--pv-text); }
+      .pv-input { padding: ${comp.input.paddingY}px ${comp.input.paddingX}px; background: ${colorVal(comp.input.bg)}; border: ${comp.input.borderWidth}px solid ${colorVal(comp.input.borderColor)}; border-radius: ${inputRadius}; color: var(--pv-text); font-family: var(--pv-font); font-size: 14px; outline: none; transition: border-color 0.15s; }
+      .pv-input:focus { border-color: ${colorVal(comp.input.focusBorder)}; }
+      .pv-input::placeholder { color: var(--pv-muted); }
+      .pv-select { padding: ${comp.input.paddingY}px ${comp.input.paddingX}px; background: ${colorVal(dd.bg)}; border: ${dd.borderWidth}px solid ${colorVal(dd.borderColor)}; border-radius: ${radiusVal(dd.radius)}; color: var(--pv-text); font-family: var(--pv-font); font-size: 14px; outline: none; cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; padding-right: 32px; }
+      .pv-select:focus { border-color: ${colorVal(dd.focusBorder)}; }
+      .pv-alerts { display: flex; flex-direction: column; gap: ${sp['12']}px; }
+      .pv-alert { padding: ${comp.alert.padding}px; background: ${colorVal(comp.alert.bg)}; border: ${comp.alert.borderWidth}px solid var(--pv-border); border-left: 4px solid; border-radius: ${alertRadius}; display: flex; align-items: center; gap: ${sp['12']}px; }
+      .pv-alert.success { border-left-color: var(--pv-success); }
+      .pv-alert.warning { border-left-color: var(--pv-warning); }
+      .pv-alert.error { border-left-color: var(--pv-error); }
+      .pv-alert.info { border-left-color: var(--pv-info); }
+      .pv-alert-icon { width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; color: #fff; font-weight: 700; font-size: 14px; flex-shrink: 0; }
+      .pv-alert.success .pv-alert-icon { background: var(--pv-success); }
+      .pv-alert.warning .pv-alert-icon { background: var(--pv-warning); }
+      .pv-alert.error .pv-alert-icon { background: var(--pv-error); }
+      .pv-alert.info .pv-alert-icon { background: var(--pv-info); }
+      .pv-table { width: 100%; border-collapse: collapse; }
+      .pv-table th { text-align: left; padding: ${sp['12']}px; background: var(--pv-surface); border-bottom: 2px solid var(--pv-border); font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--pv-muted); font-weight: 600; }
+      .pv-table td { padding: ${sp['12']}px; border-bottom: 1px solid var(--pv-border); font-size: 14px; }
+      .pv-table tr:hover td { background: var(--pv-surface); }
+      .pv-chip { display: inline-flex; align-items: center; padding: ${comp.chip.paddingY}px ${comp.chip.paddingX}px; background: ${colorVal(comp.chip.bg)}; border: ${comp.chip.borderWidth}px solid ${colorVal(comp.chip.borderColor)}; border-radius: ${radiusVal(comp.chip.radius)}; font-size: 12px; font-weight: ${t.weights.medium}; color: var(--pv-text); }
+      .pv-chip.success { background: var(--pv-success); color: #fff; border-color: var(--pv-success); }
+      .pv-chip.warning { background: var(--pv-warning); color: #fff; border-color: var(--pv-warning); }
+      .pv-chip.error { background: var(--pv-error); color: #fff; border-color: var(--pv-error); }
+      .pv-badge { display: inline-block; padding: ${comp.badge.paddingY}px ${comp.badge.paddingX}px; background: ${colorVal(comp.badge.bg)}; border-radius: ${radiusVal(comp.badge.radius)}; color: #fff; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+      .pv-divider { border: none; border-top: var(--pv-divider); margin: ${dv.spacing}px 0; }
+      .pv-footer { background: var(--pv-surface); border-top: 1px solid var(--pv-border); padding: ${sp['32']}px 0; margin-top: ${sp['48']}px; }
+      .pv-footer-inner { display: flex; justify-content: space-between; align-items: center; color: var(--pv-muted); font-size: 13px; }
+      .pv-footer-links { display: flex; gap: ${sp['16']}px; }
+      .pv-footer-links a { color: var(--pv-muted); text-decoration: none; }
+      .pv-footer-links a:hover { color: var(--pv-text); }
+      .pv-button-group { display: flex; gap: ${sp['12']}px; flex-wrap: wrap; }
+      .pv-mt-24 { margin-top: ${sp['24']}px; }
+    </style>
+    <div class="pv-page">
+      <nav class="pv-navbar">
+        <div class="pv-navbar-inner">
+          <div class="pv-brand-name">${state.meta.projectName}</div>
+          <div class="pv-nav-links">
+            <a href="#">Home</a>
+            <a href="#">Features</a>
+            <a href="#">Pricing</a>
+            <a href="#">About</a>
+          </div>
+          <button class="pv-btn">Get Started</button>
+        </div>
+      </nav>
+
+      <section class="pv-hero">
+        <div class="pv-container">
+          <div class="pv-badge">New · v${state.meta.version}</div>
+          <h1 style="margin-top: 16px;">Build better interfaces, faster</h1>
+          <p>A complete design system that scales with your product. Consistent, accessible, and beautifully crafted.</p>
+          <div class="pv-hero-actions">
+            <button class="pv-btn">Start Building</button>
+            <button class="pv-btn pv-btn-outline">View Docs</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="pv-section">
+        <div class="pv-container">
+          <h2>Components Preview</h2>
+          <div class="pv-grid pv-mt-24">
+            <div class="pv-card">
+              <div class="pv-card-icon">01</div>
+              <h3>Foundation</h3>
+              <p>Color, typography, spacing, and radius tokens that form the visual language of your product.</p>
+            </div>
+            <div class="pv-card">
+              <div class="pv-card-icon" style="background: var(--pv-secondary);">02</div>
+              <h3>Components</h3>
+              <p>Pre-built, accessible components that compose beautifully and adapt to any context.</p>
+            </div>
+            <div class="pv-card">
+              <div class="pv-card-icon" style="background: var(--pv-accent);">03</div>
+              <h3>Patterns</h3>
+              <p> battle-tested layout patterns and templates for common web application needs.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <hr class="pv-divider">
+
+      <section class="pv-section">
+        <div class="pv-container">
+          <h2>Buttons</h2>
+          <div class="pv-button-group pv-mt-24">
+            <button class="pv-btn">Primary</button>
+            <button class="pv-btn pv-btn-secondary">Secondary</button>
+            <button class="pv-btn pv-btn-accent">Accent</button>
+            <button class="pv-btn pv-btn-outline">Outline</button>
+            <button class="pv-btn pv-btn-ghost">Ghost</button>
+            <button class="pv-btn" disabled>Disabled</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="pv-section">
+        <div class="pv-container">
+          <h2>Form Elements</h2>
+          <div class="pv-form pv-mt-24">
+            <div class="pv-form-row">
+              <label>Full Name</label>
+              <input type="text" class="pv-input" placeholder="Jane Cooper">
+            </div>
+            <div class="pv-form-row">
+              <label>Email Address</label>
+              <input type="email" class="pv-input" placeholder="jane@example.com">
+            </div>
+            <div class="pv-form-row full">
+              <label>${dd.label}</label>
+              <select class="pv-select">
+                <option value="">${dd.placeholder}</option>
+                ${dd.options.map(o => `<option value="${o}">${o}</option>`).join('')}
+              </select>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="pv-section">
+        <div class="pv-container">
+          <h2>Alerts</h2>
+          <div class="pv-alerts pv-mt-24">
+            <div class="pv-alert success">
+              <div class="pv-alert-icon">✓</div>
+              <div><strong>Success!</strong> Your changes have been saved successfully.</div>
+            </div>
+            <div class="pv-alert warning">
+              <div class="pv-alert-icon">!</div>
+              <div><strong>Warning.</strong> Please review your input before continuing.</div>
+            </div>
+            <div class="pv-alert error">
+              <div class="pv-alert-icon">×</div>
+              <div><strong>Error.</strong> Something went wrong. Please try again.</div>
+            </div>
+            <div class="pv-alert info">
+              <div class="pv-alert-icon">i</div>
+              <div><strong>Info.</strong> A new version is available for download.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="pv-section">
+        <div class="pv-container">
+          <h2>Recent Activity</h2>
+          <table class="pv-table pv-mt-24">
+            <thead>
+              <tr>
+                <th>User</th>
+                <th>Action</th>
+                <th>Date</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Jane Cooper</td>
+                <td>Created project "Aurora"</td>
+                <td>2 hours ago</td>
+                <td><span class="pv-chip success">Active</span></td>
+              </tr>
+              <tr>
+                <td>Wade Warren</td>
+                <td>Updated profile settings</td>
+                <td>5 hours ago</td>
+                <td><span class="pv-chip">Pending</span></td>
+              </tr>
+              <tr>
+                <td>Esther Howard</td>
+                <td>Deleted a file</td>
+                <td>1 day ago</td>
+                <td><span class="pv-chip error">Failed</span></td>
+              </tr>
+              <tr>
+                <td>Cameron Williamson</td>
+                <td>Invited 3 team members</td>
+                <td>2 days ago</td>
+                <td><span class="pv-chip warning">Delayed</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <footer class="pv-footer">
+        <div class="pv-container">
+          <div class="pv-footer-inner">
+            <div>© 2024 ${state.meta.projectName}. Built with the design system.</div>
+            <div class="pv-footer-links">
+              <a href="#">Privacy</a>
+              <a href="#">Terms</a>
+              <a href="#">Contact</a>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+  `;
+}
+
+// ============================================================
+// EXPORT FUNCTIONS
+// ============================================================
+function generateMarkdown() {
+  const m = state.meta;
+  const lc = state.colors.light;
+  const dc = state.colors.dark;
+  const t = state.typography;
+  const r = state.radius;
+  const sh = state.shadows;
+  const sp = state.spacing;
+  const comp = state.components;
+  const dv = state.dividers;
+  const dd = state.dropdown;
+  const l = state.layout;
+
+  const colorTable = (theme) => {
+    const c = state.colors[theme];
+    return COLOR_TOKENS.map(t => {
+      const rgb = hexToRgb(c[t.key]);
+      return `| ${t.key} | ${c[t.key].toUpperCase()} | rgb(${rgb.r}, ${rgb.g}, ${rgb.b}) | ${t.desc} |`;
+    }).join('\n');
+  };
+
+  return `# ${m.projectName}
+
+> **Version** ${m.version} · **Author** ${m.author} · **Generated** ${new Date().toISOString().split('T')[0]}
+> ${m.description}
+
+---
+
+## 1. Color Palette
+
+### Light Theme
+| Token | Hex | RGB | Usage |
+|-------|-----|-----|-------|
+ ${colorTable('light')}
+
+### Dark Theme
+| Token | Hex | RGB | Usage |
+|-------|-----|-----|-------|
+ ${colorTable('dark')}
+
+---
+
+## 2. Typography
+
+- **Body Font:** ${t.fontFamily}
+- **Heading Font:** ${t.headingFont}
+- **Base Size:** ${t.baseSize}px
+- **Line Height:** ${t.lineHeight}
+- **Heading Line Height:** ${t.headingLineHeight}
+- **Letter Spacing:** ${t.letterSpacing}px
+- **Paragraph Spacing:** ${t.paragraphSpacing}px
+
+### Font Weights
+| Name | Weight |
+|------|--------|
+ ${Object.entries(t.weights).map(([k,v]) => `| ${k} | ${v} |`).join('\n')}
+
+### Type Scale
+| Level | Size | Weight | Line Height |
+|-------|------|--------|-------------|
+ ${['h1','h2','h3','h4','h5','h6'].map(h => `| ${h.toUpperCase()} | ${t.headingSizes[h]}px | ${t.weights.bold} | ${t.headingLineHeight} |`).join('\n')}
+| Body | ${t.baseSize}px | ${t.weights.normal} | ${t.lineHeight} |
+
+---
+
+## 3. Spacing System
+
+| Token | Value | Usage |
+|-------|-------|-------|
+ ${Object.entries(sp).map(([k,v]) => `| space-${k} | ${v}px | Padding, margin, gap |`).join('\n')}
+
+---
+
+## 4. Border Radius
+
+| Token | Value |
+|-------|-------|
+ ${Object.entries(r).map(([k,v]) => `| radius-${k} | ${v === 9999 ? '9999px (full)' : v + 'px'} |`).join('\n')}
+
+---
+
+## 5. Shadow System
+
+| Token | Value |
+|-------|-------|
+ ${Object.entries(sh).map(([k,v]) => `| shadow-${k} | ${shadowToString(v)} |`).join('\n')}
+
+---
+
+## 6. Component Styles
+
+### Button
+- **Radius:** ${comp.button.radius}
+- **Border Width:** ${comp.button.borderWidth}px
+- **Border Color:** ${comp.button.borderColor}
+- **Background:** ${comp.button.bg}
+- **Shadow:** ${comp.button.shadow}
+- **Padding:** ${comp.button.paddingY}px ${comp.button.paddingX}px
+- **Disabled Opacity:** ${comp.button.disabledOpacity}
+- **States:** Hover (brightness 0.92), Active (brightness 0.85), Disabled (opacity ${comp.button.disabledOpacity})
+
+### Input
+- **Radius:** ${comp.input.radius}
+- **Border Width:** ${comp.input.borderWidth}px
+- **Border Color:** ${comp.input.borderColor}
+- **Background:** ${comp.input.bg}
+- **Padding:** ${comp.input.paddingY}px ${comp.input.paddingX}px
+- **Focus Border:** ${comp.input.focusBorder}
+
+### Card
+- **Radius:** ${comp.card.radius}
+- **Border Width:** ${comp.card.borderWidth}px
+- **Border Color:** ${comp.card.borderColor}
+- **Background:** ${comp.card.bg}
+- **Shadow:** ${comp.card.shadow}
+- **Padding:** ${comp.card.padding}px
+
+### Dialog
+- **Radius:** ${comp.dialog.radius}
+- **Background:** ${comp.dialog.bg}
+- **Shadow:** ${comp.dialog.shadow}
+- **Padding:** ${comp.dialog.padding}px
+
+### Badge
+- **Radius:** ${comp.badge.radius}
+- **Background:** ${comp.badge.bg}
+- **Padding:** ${comp.badge.paddingY}px ${comp.badge.paddingX}px
+
+### Chip
+- **Radius:** ${comp.chip.radius}
+- **Border Width:** ${comp.chip.borderWidth}px
+- **Background:** ${comp.chip.bg}
+- **Padding:** ${comp.chip.paddingY}px ${comp.chip.paddingX}px
+
+### Alert
+- **Radius:** ${comp.alert.radius}
+- **Border Width:** ${comp.alert.borderWidth}px
+- **Background:** ${comp.alert.bg}
+- **Padding:** ${comp.alert.padding}px
+- **Variants:** success, warning, error, info (left border 4px accent color)
+
+### Navbar
+- **Height:** ${comp.navbar.height}px
+- **Background:** ${comp.navbar.bg}
+- **Shadow:** ${comp.navbar.shadow}
+- **Padding:** ${comp.navbar.paddingX}px horizontal
+
+### Sidebar
+- **Width:** ${comp.sidebar.width}px
+- **Background:** ${comp.sidebar.bg}
+- **Padding:** ${comp.sidebar.padding}px
+
+---
+
+## 7. Dividers
+
+- **Thickness:** ${dv.thickness}px
+- **Color:** ${dv.color}
+- **Style:** ${dv.style}
+- **Spacing:** ${dv.spacing}px
+
+---
+
+## 8. Dropdown Configuration
+
+- **Label:** ${dd.label}
+- **Placeholder:** ${dd.placeholder}
+- **Options:** ${dd.options.join(', ')}
+- **Radius:** ${dd.radius}
+- **Background:** ${dd.bg}
+- **Border:** ${dd.borderWidth}px solid ${dd.borderColor}
+- **Hover Background:** ${dd.hoverBg}
+- **Focus Border:** ${dd.focusBorder}
+
+---
+
+## 9. Layout System
+
+- **Container Width:** ${l.containerWidth}px
+- **Grid Columns:** ${l.gridColumns}
+- **Gutter Spacing:** ${l.gutter}px
+
+### Breakpoints
+| Name | Min Width |
+|------|-----------|
+ ${Object.entries(l.breakpoints).map(([k,v]) => `| ${k} | ${v}px |`).join('\n')}
+
+---
+
+## 10. Accessibility Recommendations
+
+- **Contrast:** Maintain WCAG 2.1 AA contrast ratios (4.5:1 for normal text, 3:1 for large text and UI components)
+- **Semantic HTML:** Use HTML5 semantic elements (\`<nav>\`, \`<main>\`, \`<section>\`, \`<article>\`, \`<aside>\`, \`<footer>\`)
+- **Focus States:** Ensure all interactive elements have visible focus indicators (2px outline with 2px offset minimum)
+- **Keyboard Navigation:** Support full keyboard navigation with logical tab order and skip-to-content links
+- **ARIA:** Provide \`aria-label\` for icon-only buttons, \`aria-expanded\` for dropdowns, \`aria-live\` for alerts
+- **Screen Readers:** Test with NVDA, JAWS, and VoiceOver; provide descriptive alt text for images
+- **Motion:** Respect \`prefers-reduced-motion\` media query for animations
+- **Touch Targets:** Maintain minimum 44×44px touch target size on mobile
+- **Color Independence:** Never rely on color alone to convey information; use icons, text, or patterns
+- **Font Scaling:** Ensure layouts work at 200% browser zoom
+
+---
+
+## 11. Light Theme CSS Variables
+
+\`\`\`css
+:root {
+  /* Colors */
+  --color-primary: ${lc.primary};
+  --color-secondary: ${lc.secondary};
+  --color-accent: ${lc.accent};
+  --color-background: ${lc.background};
+  --color-surface: ${lc.surface};
+  --color-foreground: ${lc.foreground};
+  --color-muted: ${lc.muted};
+  --color-border: ${lc.border};
+  --color-success: ${lc.success};
+  --color-warning: ${lc.warning};
+  --color-error: ${lc.error};
+  --color-info: ${lc.info};
+  --color-shadow: ${lc.shadow};
+
+  /* Typography */
+  --font-body: '${t.fontFamily}', sans-serif;
+  --font-heading: '${t.headingFont}', sans-serif;
+  --font-size-base: ${t.baseSize}px;
+  --font-size-h1: ${t.headingSizes.h1}px;
+  --font-size-h2: ${t.headingSizes.h2}px;
+  --font-size-h3: ${t.headingSizes.h3}px;
+  --font-size-h4: ${t.headingSizes.h4}px;
+  --font-size-h5: ${t.headingSizes.h5}px;
+  --font-size-h6: ${t.headingSizes.h6}px;
+  --font-weight-normal: ${t.weights.normal};
+  --font-weight-medium: ${t.weights.medium};
+  --font-weight-semibold: ${t.weights.semibold};
+  --font-weight-bold: ${t.weights.bold};
+  --line-height: ${t.lineHeight};
+  --line-height-heading: ${t.headingLineHeight};
+  --letter-spacing: ${t.letterSpacing}px;
+
+  /* Spacing */
+ ${Object.entries(sp).map(([k,v]) => `  --space-${k}: ${v}px;`).join('\n')}
+
+  /* Border Radius */
+  --radius-xs: ${r.xs}px;
+  --radius-sm: ${r.sm}px;
+  --radius-md: ${r.md}px;
+  --radius-lg: ${r.lg}px;
+  --radius-xl: ${r.xl}px;
+  --radius-full: ${r.full}px;
+
+  /* Shadows */
+  --shadow-xs: ${shadowToString(sh.xs)};
+  --shadow-sm: ${shadowToString(sh.sm)};
+  --shadow-md: ${shadowToString(sh.md)};
+  --shadow-lg: ${shadowToString(sh.lg)};
+  --shadow-xl: ${shadowToString(sh.xl)};
+
+  /* Layout */
+  --container-width: ${l.containerWidth}px;
+  --grid-columns: ${l.gridColumns};
+  --gutter: ${l.gutter}px;
+}
+\`\`\`
+
+---
+
+## 12. Dark Theme CSS Variables
+
+\`\`\`css
+[data-theme="dark"] {
+  --color-primary: ${dc.primary};
+  --color-secondary: ${dc.secondary};
+  --color-accent: ${dc.accent};
+  --color-background: ${dc.background};
+  --color-surface: ${dc.surface};
+  --color-foreground: ${dc.foreground};
+  --color-muted: ${dc.muted};
+  --color-border: ${dc.border};
+  --color-success: ${dc.success};
+  --color-warning: ${dc.warning};
+  --color-error: ${dc.error};
+  --color-info: ${dc.info};
+  --color-shadow: ${dc.shadow};
+}
+\`\`\`
+
+---
+
+## 13. Responsive Breakpoints
+
+\`\`\`css
+/* Mobile */ @media (min-width: ${l.breakpoints.mobile}px) { /* ... */ }
+/* Tablet */ @media (min-width: ${l.breakpoints.tablet}px) { /* ... */ }
+/* Laptop */ @media (min-width: ${l.breakpoints.laptop}px) { /* ... */ }
+/* Desktop */ @media (min-width: ${l.breakpoints.desktop}px) { /* ... */ }
+/* Wide */ @media (min-width: ${l.breakpoints.wide}px) { /* ... */ }
+\`\`\`
+
+---
+
+_Generated by DesignMD · Suitable for AI-assisted website generation_
+`;
+}
+
+function generateJSON() {
+  return JSON.stringify(state, null, 2);
+}
+
+function generateCSS() {
+  const lc = state.colors.light;
+  const dc = state.colors.dark;
+  const t = state.typography;
+  const r = state.radius;
+  const sh = state.shadows;
+  const sp = state.spacing;
+  const l = state.layout;
+
+  let css = `/* ${state.meta.projectName} - CSS Variables */\n/* Version ${state.meta.version} */\n\n`;
+  css += `:root {\n`;
+  css += `  /* Colors - Light Theme */\n`;
+  Object.entries(lc).forEach(([k,v]) => { css += `  --color-${k}: ${v};\n`; });
+  css += `\n  /* Typography */\n`;
+  css += `  --font-body: '${t.fontFamily}', sans-serif;\n`;
+  css += `  --font-heading: '${t.headingFont}', sans-serif;\n`;
+  css += `  --font-size-base: ${t.baseSize}px;\n`;
+  Object.entries(t.headingSizes).forEach(([k,v]) => { css += `  --font-size-${k}: ${v}px;\n`; });
+  Object.entries(t.weights).forEach(([k,v]) => { css += `  --font-weight-${k}: ${v};\n`; });
+  css += `  --line-height: ${t.lineHeight};\n`;
+  css += `  --line-height-heading: ${t.headingLineHeight};\n`;
+  css += `  --letter-spacing: ${t.letterSpacing}px;\n`;
+  css += `  --paragraph-spacing: ${t.paragraphSpacing}px;\n`;
+  css += `\n  /* Spacing */\n`;
+  Object.entries(sp).forEach(([k,v]) => { css += `  --space-${k}: ${v}px;\n`; });
+  css += `\n  /* Border Radius */\n`;
+  Object.entries(r).forEach(([k,v]) => { css += `  --radius-${k}: ${v === 9999 ? '9999px' : v + 'px'};\n`; });
+  css += `\n  /* Shadows */\n`;
+  Object.entries(sh).forEach(([k,v]) => { css += `  --shadow-${k}: ${shadowToString(v)};\n`; });
+  css += `\n  /* Layout */\n`;
+  css += `  --container-width: ${l.containerWidth}px;\n`;
+  css += `  --grid-columns: ${l.gridColumns};\n`;
+  css += `  --gutter: ${l.gutter}px;\n`;
+  css += `\n  /* Breakpoints */\n`;
+  Object.entries(l.breakpoints).forEach(([k,v]) => { css += `  --bp-${k}: ${v}px;\n`; });
+  css += `}\n\n`;
+  css += `[data-theme="dark"] {\n`;
+  Object.entries(dc).forEach(([k,v]) => { css += `  --color-${k}: ${v};\n`; });
+  css += `}\n`;
+  return css;
+}
+
+function generateTailwind() {
+  const c = state.colors.light;
+  const t = state.typography;
+  const r = state.radius;
+  const sh = state.shadows;
+  const sp = state.spacing;
+  const l = state.layout;
+
+  return `/** @type {import('tailwindcss').Config} */
+module.exports = {
+  content: ['./src/**/*.{html,js,jsx,ts,tsx,vue}'],
+  theme: {
+    extend: {
+      colors: {
+        primary: '${c.primary}',
+        secondary: '${c.secondary}',
+        accent: '${c.accent}',
+        background: '${c.background}',
+        surface: '${c.surface}',
+        foreground: '${c.foreground}',
+        muted: '${c.muted}',
+        border: '${c.border}',
+        success: '${c.success}',
+        warning: '${c.warning}',
+        error: '${c.error}',
+        info: '${c.info}',
+      },
+      fontFamily: {
+        sans: ['${t.fontFamily}', 'sans-serif'],
+        heading: ['${t.headingFont}', 'sans-serif'],
+      },
+      fontSize: {
+        base: '${t.baseSize}px',
+        h1: ['${t.headingSizes.h1}px', { lineHeight: '${t.headingLineHeight}', fontWeight: '${t.weights.bold}' }],
+        h2: ['${t.headingSizes.h2}px', { lineHeight: '${t.headingLineHeight}', fontWeight: '${t.weights.bold}' }],
+        h3: ['${t.headingSizes.h3}px', { lineHeight: '${t.headingLineHeight}', fontWeight: '${t.weights.semibold}' }],
+        h4: ['${t.headingSizes.h4}px', { lineHeight: '${t.headingLineHeight}', fontWeight: '${t.weights.semibold}' }],
+        h5: ['${t.headingSizes.h5}px', { lineHeight: '${t.headingLineHeight}', fontWeight: '${t.weights.medium}' }],
+        h6: ['${t.headingSizes.h6}px', { lineHeight: '${t.headingLineHeight}', fontWeight: '${t.weights.medium}' }],
+      },
+      borderRadius: {
+        'xs': '${r.xs}px',
+        'sm': '${r.sm}px',
+        'md': '${r.md}px',
+        'lg': '${r.lg}px',
+        'xl': '${r.xl}px',
+        'full': '${r.full === 9999 ? '9999px' : r.full + 'px'}',
+      },
+      boxShadow: {
+        'xs': '${shadowToString(sh.xs)}',
+        'sm': '${shadowToString(sh.sm)}',
+        'md': '${shadowToString(sh.md)}',
+        'lg': '${shadowToString(sh.lg)}',
+        'xl': '${shadowToString(sh.xl)}',
+      },
+      spacing: {
+ ${Object.entries(sp).map(([k,v]) => `        '${k}': '${v}px',`).join('\n')}
+      },
+      screens: {
+        'mobile': '${l.breakpoints.mobile}px',
+        'tablet': '${l.breakpoints.tablet}px',
+        'laptop': '${l.breakpoints.laptop}px',
+        'desktop': '${l.breakpoints.desktop}px',
+        'wide': '${l.breakpoints.wide}px',
+      },
+      maxWidth: {
+        'container': '${l.containerWidth}px',
+      },
+    },
+  },
+  plugins: [],
+  darkMode: ['class', '[data-theme="dark"]'],
+};
+`;
+}
+
+function generateDesignTokens() {
+  const lc = state.colors.light;
+  const dc = state.colors.dark;
+  const t = state.typography;
+  const r = state.radius;
+  const sh = state.shadows;
+  const sp = state.spacing;
+  const l = state.layout;
+
+  const tokens = {
+    $meta: {
+      projectName: state.meta.projectName,
+      version: state.meta.version,
+      author: state.meta.author,
+      description: state.meta.description
+    },
+    color: {
+      light: Object.fromEntries(Object.entries(lc).map(([k,v]) => [k, { value: v, type: 'color' }])),
+      dark: Object.fromEntries(Object.entries(dc).map(([k,v]) => [k, { value: v, type: 'color' }]))
+    },
+    typography: {
+      fontFamily: { body: { value: `'${t.fontFamily}', sans-serif`, type: 'fontFamily' }, heading: { value: `'${t.headingFont}', sans-serif`, type: 'fontFamily' } },
+      fontSize: {
+        base: { value: `${t.baseSize}px`, type: 'dimension' },
+        ...Object.fromEntries(Object.entries(t.headingSizes).map(([k,v]) => [k, { value: `${v}px`, type: 'dimension' }]))
+      },
+      fontWeight: Object.fromEntries(Object.entries(t.weights).map(([k,v]) => [k, { value: `${v}`, type: 'fontWeight' }])),
+      lineHeight: { body: { value: `${t.lineHeight}`, type: 'number' }, heading: { value: `${t.headingLineHeight}`, type: 'number' } },
+      letterSpacing: { value: `${t.letterSpacing}px`, type: 'dimension' }
+    },
+    spacing: Object.fromEntries(Object.entries(sp).map(([k,v]) => [k, { value: `${v}px`, type: 'dimension' }])),
+    radius: Object.fromEntries(Object.entries(r).map(([k,v]) => [k, { value: v === 9999 ? '9999px' : `${v}px`, type: 'dimension' }])),
+    shadow: Object.fromEntries(Object.entries(sh).map(([k,v]) => [k, { value: shadowToString(v), type: 'boxShadow' }])),
+    layout: {
+      container: { value: `${l.containerWidth}px`, type: 'dimension' },
+      columns: { value: `${l.gridColumns}`, type: 'number' },
+      gutter: { value: `${l.gutter}px`, type: 'dimension' },
+      breakpoints: Object.fromEntries(Object.entries(l.breakpoints).map(([k,v]) => [k, { value: `${v}px`, type: 'dimension' }]))
+    }
+  };
+  return JSON.stringify(tokens, null, 2);
+}
+
+// ============================================================
+// IMPORT
+// ============================================================
+function importFromMarkdown(text) {
+  try {
+    // Try to extract JSON-like state from markdown
+    const jsonMatch = text.match(/```json\n([\s\S]*?)\n```/);
+    if (jsonMatch) {
+      const obj = JSON.parse(jsonMatch[1]);
+      if (obj.meta || obj.colors || obj.typography) {
+        state = Object.assign(JSON.parse(JSON.stringify(DEFAULT_STATE)), obj);
+        saveState();
+        renderConfig();
+        showToast('Imported from markdown', 'success');
+        return;
+      }
+    }
+    showToast('Could not parse markdown', 'error');
+  } catch(e) {
+    showToast('Import failed: ' + e.message, 'error');
+  }
+}
+
+function importFromJSON(text) {
+  try {
+    const obj = JSON.parse(text);
+    state = Object.assign(JSON.parse(JSON.stringify(DEFAULT_STATE)), obj);
+    saveState();
+    renderConfig();
+    showToast('Imported configuration', 'success');
+  } catch(e) {
+    showToast('Import failed: ' + e.message, 'error');
+  }
+}
+
+// ============================================================
+// MODAL
+// ============================================================
+function openModal(title, code, filename, mime) {
+  document.getElementById('modalTitle').textContent = title;
+  document.getElementById('modalCode').textContent = code;
+  document.getElementById('modalBackdrop').classList.add('open');
+  pendingExport = { code, filename, mime };
+}
+function closeModal() {
+  document.getElementById('modalBackdrop').classList.remove('open');
+  pendingExport = null;
+}
+
+// ============================================================
+// INIT
+// ============================================================
+function init() {
+  // Load fonts
+  loadFont(state.typography.fontFamily);
+  loadFont(state.typography.headingFont);
+
+  // Setup project name input
+  const projectNameInput = document.getElementById('projectName');
+  projectNameInput.value = state.meta.projectName;
+  projectNameInput.addEventListener('input', e => {
+    state.meta.projectName = e.target.value;
+    saveState();
+    renderPreview();
+  });
+
+  setupSidebar();
+  renderConfig();
+
+  // Preview tabs
+  document.querySelectorAll('.preview-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.preview-tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      previewTheme = tab.dataset.preview;
+      renderPreview();
+    });
+  });
+
+  // Topbar buttons
+  document.getElementById('importBtn').addEventListener('click', () => {
+    document.getElementById('fileInput').click();
+  });
+  document.getElementById('fileInput').addEventListener('change', e => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = ev => {
+      const text = ev.target.result;
+      if (file.name.endsWith('.json')) importFromJSON(text);
+      else importFromMarkdown(text);
+    };
+    reader.readAsText(file);
+    e.target.value = '';
+  });
+
+  document.getElementById('resetBtn').addEventListener('click', () => {
+    if (confirm('Reset all settings to defaults? This cannot be undone.')) {
+      state = JSON.parse(JSON.stringify(DEFAULT_STATE));
+      saveState();
+      renderConfig();
+      showToast('Reset to defaults', 'success');
+    }
+  });
+
+  document.getElementById('copyMdBtn').addEventListener('click', () => {
+    copyToClipboard(generateMarkdown());
+  });
+
+  // Export dropdown
+  const exportBtn = document.getElementById('exportBtn');
+  const exportDropdown = document.getElementById('exportDropdown');
+  exportBtn.addEventListener('click', e => {
+    e.stopPropagation();
+    exportDropdown.classList.toggle('open');
+  });
+  document.addEventListener('click', () => exportDropdown.classList.remove('open'));
+  exportDropdown.addEventListener('click', e => e.stopPropagation());
+
+  exportDropdown.querySelectorAll('.export-item').forEach(item => {
+    item.addEventListener('click', () => {
+      const type = item.dataset.export;
+      exportDropdown.classList.remove('open');
+      handleExport(type);
+    });
+  });
+
+  // Modal
+  document.getElementById('modalClose').addEventListener('click', closeModal);
+  document.getElementById('modalBackdrop').addEventListener('click', e => {
+    if (e.target.id === 'modalBackdrop') closeModal();
+  });
+  document.getElementById('modalCopy').addEventListener('click', () => {
+    if (pendingExport) copyToClipboard(pendingExport.code);
+  });
+  document.getElementById('modalDownload').addEventListener('click', () => {
+    if (pendingExport) {
+      downloadFile(pendingExport.filename, pendingExport.code, pendingExport.mime);
+      closeModal();
+    }
+  });
+
+  // Keyboard
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeModal();
+    if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+      e.preventDefault();
+      saveState();
+      showToast('Saved to browser storage', 'success');
+    }
+  });
+
+  // Auto-save on changes (debounced)
+  let saveTimer;
+  const origSave = saveState;
+  window.saveState = function() {
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(origSave, 300);
+  };
+}
+
+function handleExport(type) {
+  const safeName = state.meta.projectName.replace(/[^a-zA-Z0-9]/g, '-').toLowerCase();
+  switch(type) {
+    case 'md':
+      openModal('design.md', generateMarkdown(), 'design.md', 'text/markdown');
+      break;
+    case 'json':
+      openModal('config.json', generateJSON(), `${safeName}-config.json`, 'application/json');
+      break;
+    case 'css':
+      openModal('variables.css', generateCSS(), `${safeName}.css`, 'text/css');
+      break;
+    case 'tailwind':
+      openModal('tailwind.config.js', generateTailwind(), 'tailwind.config.js', 'text/javascript');
+      break;
+    case 'tokens':
+      openModal('design-tokens.json', generateDesignTokens(), `${safeName}.tokens.json`, 'application/json');
+      break;
+  }
+}
+
+// Override saveState reference at top-level
+const _origSaveState = saveState;
+saveState = function() {
+  _origSaveState();
+};
+
+init();
+</script>
+</body>
+</html>
