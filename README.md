@@ -2,10 +2,12 @@
 
 A visual tool for creating and exporting design system documentation in Markdown. Built with vanilla HTML, CSS, and JavaScript — no build tools required.
 
+[Preview](https://me-imdadul.github.io/DesignMD/)
+
 ![Preview](public/screenshot.png)
 
 ---
-
+description as (Pre)
 ## Features
 
 - **Markdown Documentation** — Generate comprehensive `design.md` docs with color tables, type scales, component specs, and more
